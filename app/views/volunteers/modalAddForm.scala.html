@@ -1,0 +1,277 @@
+@(event: Event, shiftId: Long, volunteerForm: Form[Volunteer])
+
+@import helper._
+
+@implicitFieldConstructor = @{ FieldConstructor(twitterBootstrapInput.render) }
+
+@general.alerts()
+@if(volunteerForm.hasErrors) {
+    <div class="alert alert-dismissable alert-danger">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        @Messages("form.has.errors")
+    </div>
+}
+@if(volunteerForm.hasGlobalErrors) {
+    <div class="info-board info-board-red">
+        <span class="label label-important">@volunteerForm.globalError.message</span>
+    </div>
+}
+@form(controllers.routes.VolunteersMgmt.saveShiftVolunteer(event, shiftId), 'id -> "volunteerForm") {
+
+    @inputText(volunteerForm("firstName"), '_addon -> "glyphicon-user", '_label -> "nolabel", 'placeholder -> "Req: First Name", 'class -> "form-control")
+    @inputText(volunteerForm("lastName"), '_addon -> "glyphicon-user", '_label -> "nolabel", 'placeholder -> "Req: Last Name", 'class -> "form-control")
+    @inputText(volunteerForm("email"), '_addon -> "@", '_label -> "nolabel", 'placeholder -> "Req: Email", 'class -> "form-control")
+
+
+
+    @inputText(volunteerForm("phone"), '_label -> "nolabel", 'id -> "phNo", 'class -> "form-control", '_addon -> "glyphicon-earphone", 'placeholder -> "Phone: 555-555-1212 (only numbers)", 'title -> "10 digits and numeric only  and the format will be like example(ex.123-345-5678)")
+
+
+    @inputText(volunteerForm("mobile"), '_addon -> "glyphicon-earphone",'id -> "mobileNo", '_label -> "nolabel", 'placeholder -> "Mobile: 555-555-1212 (only numbers)", 'class -> "form-control", 'title -> "10 digits (numeric only)")
+    @inputText(volunteerForm("note"), '_addon -> "glyphicon-file", '_label -> "nolabel", 'placeholder -> "Note", 'class -> "form-control")
+    <button type="button" class="btn btn-green" id="checkout" onclick="submitVolunteerForm();">Add</button>
+    <a href="#" class="btn btn-default" type="button" id="cancelVolunteer">Cancel</a>
+
+}
+
+
+<script>
+
+//=========new add
+
+
+   $( "#phNo" ).keyup(function(){
+   //alert("on keyup")
+
+   var phNo1;
+   //var lastChar;
+   var phNo = document.getElementById("phNo").value;
+   //alert("phNo "+phNo)
+   //previousLength = phNo.length;
+   //alert("phNo "+phNo)
+   currentLength = phNo.length;
+   //alert("currentLength :: "+currentLength);
+   //alert("previousLength :: "+previousLength);
+var length;
+
+if(currentLength == 4 || currentLength == 8){
+//alert("if(currentLength == 4 || currentLength == 8)");
+var lastChar = phNo.charAt(currentLength-1);
+//alert("lastChar "+lastChar);
+if(lastChar!= '-'){
+phNo = phNo.substring(0,currentLength-1);
+phNo =phNo.concat("-");
+phNo = phNo.concat(lastChar);
+
+}
+//phPart1 = phNo;
+previousLength = phNo.length;
+ $('#phNo').val(phNo);
+
+}
+
+
+
+
+else{
+
+   if(currentLength<previousLength){
+//alert("currentLength<previousLength");
+   previousLength = currentLength;
+   if(currentLength> 0){
+   //alert("currentLength ::"+currentLength);
+//alert("phNo "+phNo);
+var lastChar = phNo.charAt(currentLength-1);
+
+//alert("lastChar"+lastChar);
+if(lastChar == '-'){
+phNo = phNo.substring(0,currentLength-1);
+}
+else{
+phNo = phNo.substring(0,currentLength);
+}
+   //alert("if return");
+//phNo = phNo.substring(0,currentLength);
+     $('#phNo').val(phNo);
+
+   }
+
+   phPart1 = null;
+   }
+
+
+else{
+   //alert("else");
+
+      if( phNo.length <8){
+      previousLength = phNo.length;
+      if(phNo.contains("-")){
+     // alert("phNo.contains("-")")
+      length = phNo.length;
+     // alert("length1 "+length)
+        phNo = phNo.substring(phNo.indexOf("-")+1,length);
+        //alert("phNo "+phNo);
+
+      }
+      length = phNo.length;
+
+    //alert("length11 "+length)
+      if(length == 3){
+     // alert("length == 3"+phNo.concat("-"));
+      if(phPart1!=null){
+      phNo1 = phNo.concat("-");
+      //alert("phNo1 :: "+phNo1);
+     // alert("before phPart1 :: "+phPart1);
+      phPart1 = phPart1.concat(phNo1);
+      previousLength = phPart1.length;
+      //alert("after phPart1 :: "+phPart1)
+         $('#phNo').val(phPart1);
+      }else{
+      phNo = document.getElementById("phNo").value;
+      // alert("before phPart1 :: "+phPart1);
+      phPart1 = phNo.concat("-");
+      previousLength = phPart1.length;
+      //alert("previousLength ")
+      //alert("phPart1 :: "+phPart1)
+         $('#phNo').val(phPart1);
+      }
+
+
+   // document.getElementById("phNo").innerHTML = phNo.concat("-");
+       // alert("final :: "+document.getElementById("phNo").value);
+      }
+      }else{
+      previousLength = phNo.length;
+      }
+ //aler("previousLength :: "+previousLength);
+      }
+      }
+
+
+   });
+  </script>
+
+
+<script>
+
+//=========new add
+
+
+   $( "#mobileNo" ).keyup(function(){
+   //alert("on keyup")
+
+   var phNo1;
+   //var lastChar;
+   var phNo = document.getElementById("mobileNo").value;
+   //alert("phNo "+phNo)
+   //previousLength = phNo.length;
+   //alert("phNo "+phNo)
+   currentLength = phNo.length;
+   //alert("currentLength :: "+currentLength);
+   //alert("previousLength :: "+previousLength);
+var length;
+
+if(currentLength == 4 || currentLength == 8){
+//alert("if(currentLength == 4 || currentLength == 8)");
+var lastChar = phNo.charAt(currentLength-1);
+//alert("lastChar "+lastChar);
+if(lastChar!= '-'){
+phNo = phNo.substring(0,currentLength-1);
+phNo =phNo.concat("-");
+phNo = phNo.concat(lastChar);
+
+}
+//phPart1 = phNo;
+previousLength = phNo.length;
+ $('#mobileNo').val(phNo);
+
+}
+
+
+
+
+else{
+
+   if(currentLength<previousLength){
+//alert("currentLength<previousLength");
+   previousLength = currentLength;
+   if(currentLength> 0){
+   //alert("currentLength ::"+currentLength);
+//alert("phNo "+phNo);
+var lastChar = phNo.charAt(currentLength-1);
+
+//alert("lastChar"+lastChar);
+if(lastChar == '-'){
+phNo = phNo.substring(0,currentLength-1);
+}
+else{
+phNo = phNo.substring(0,currentLength);
+}
+   //alert("if return");
+//phNo = phNo.substring(0,currentLength);
+     $('#mobileNo').val(phNo);
+
+   }
+
+   phPart1 = null;
+   }
+
+
+else{
+   //alert("else");
+
+      if( phNo.length <8){
+      previousLength = phNo.length;
+      if(phNo.contains("-")){
+     // alert("phNo.contains("-")")
+      length = phNo.length;
+     // alert("length1 "+length)
+        phNo = phNo.substring(phNo.indexOf("-")+1,length);
+        //alert("phNo "+phNo);
+
+      }
+      length = phNo.length;
+
+    //alert("length11 "+length)
+      if(length == 3){
+     // alert("length == 3"+phNo.concat("-"));
+      if(phPart1!=null){
+      phNo1 = phNo.concat("-");
+      //alert("phNo1 :: "+phNo1);
+     // alert("before phPart1 :: "+phPart1);
+      phPart1 = phPart1.concat(phNo1);
+      previousLength = phPart1.length;
+      //alert("after phPart1 :: "+phPart1)
+         $('#mobileNo').val(phPart1);
+      }else{
+      phNo = document.getElementById("mobileNo").value;
+      // alert("before phPart1 :: "+phPart1);
+      phPart1 = phNo.concat("-");
+      previousLength = phPart1.length;
+      //alert("previousLength ")
+      //alert("phPart1 :: "+phPart1)
+         $('#mobileNo').val(phPart1);
+      }
+
+
+   // document.getElementById("phNo").innerHTML = phNo.concat("-");
+       // alert("final :: "+document.getElementById("phNo").value);
+      }
+      }else{
+      previousLength = phNo.length;
+      }
+ //aler("previousLength :: "+previousLength);
+      }
+      }
+
+
+   });
+  </script>
+
+
+
+
+
+
+
+<script src="@ControllerUtil.getResourceRoute("scVolunteersView.min.js")"></script>

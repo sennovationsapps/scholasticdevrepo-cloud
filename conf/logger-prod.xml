@@ -1,0 +1,51 @@
+<configuration scan="true" scanPeriod="30 seconds">
+	<appender name="ScholasticWebApplication"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${application.home}/logs/ScholasticWebApplication.log</file>
+		<append>true</append>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">       <!-- daily rollover -->
+			<fileNamePattern>${application.home}/logs/archive/ScholasticWebApplication%d{yyyy-MM-dd}.log
+			</fileNamePattern>             <!-- keep 30 days worth of history -->
+			<maxHistory>10</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<pattern>%d %level %logger - %m%n</pattern>
+		</encoder>
+	</appender>
+	
+	<appender name="ScholasticDonations"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${application.home}/logs/ScholasticDonations.log</file>
+		<append>true</append>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">       <!-- daily rollover -->
+			<fileNamePattern>${application.home}/logs/archive/ScholasticDonations%d{yyyy-MM-dd}.log
+			</fileNamePattern>             <!-- keep 30 days worth of history -->
+			<maxHistory>10</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<pattern>%d %level %logger - %m%n</pattern>
+		</encoder>
+	</appender>
+	
+	<appender name="ScholasticReceipts"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${application.home}/logs/ScholasticReceipts.log</file>
+		<append>true</append>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">       <!-- daily rollover -->
+			<fileNamePattern>${application.home}/logs/archive/ScholasticReceipts%d{yyyy-MM-dd}.log
+			</fileNamePattern>             <!-- keep 30 days worth of history -->
+			<maxHistory>10</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<pattern>%d %level %logger - %m%n</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>%d THREAD:[%thread] %level %logger - %m%n</pattern>
+		</encoder>
+	</appender>
+
+	<include resource="conf/loggerAppenders.xml"/>
+</configuration>

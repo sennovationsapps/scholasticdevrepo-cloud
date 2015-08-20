@@ -1,0 +1,77 @@
+<configuration>
+	<appender name="ScholasticWebApplication"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>logs/ScholasticWebApplication.log</file>
+		<append>true</append>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">       <!-- daily rollover -->
+			<fileNamePattern>logs/archive/ScholasticWebApplication%d{yyyy-MM-dd}.log
+			</fileNamePattern>             <!-- keep 30 days worth of history -->
+			<maxHistory>10</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<pattern>%d %level %logger - %m%n</pattern>
+		</encoder>
+	</appender>
+	
+	<appender name="ScholasticDonations"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>logs/ScholasticDonations.log</file>
+		<append>true</append>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">       <!-- daily rollover -->
+			<fileNamePattern>logs/archive/ScholasticDonations%d{yyyy-MM-dd}.log
+			</fileNamePattern>             <!-- keep 30 days worth of history -->
+			<maxHistory>10</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<pattern>%d %level %logger - %m%n</pattern>
+		</encoder>
+	</appender>
+	
+	<appender name="ScholasticReceipts"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>logs/ScholasticReceipts.log</file>
+		<append>true</append>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">       <!-- daily rollover -->
+			<fileNamePattern>logs/archive/ScholasticReceipts%d{yyyy-MM-dd}.log
+			</fileNamePattern>             <!-- keep 30 days worth of history -->
+			<maxHistory>10</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<pattern>%d %level %logger - %m%n</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>%d %level %logger - %m%n</pattern>
+		</encoder>
+	</appender>
+
+	<logger name="org.apache" level="warn"/>
+	<logger name="org.springframework" level="warn"/>
+	<logger name="org.springframework.transaction" level="warn"/>
+	
+	<logger name="play" level="info"/>
+	<logger name="application" level="info"/>
+	<logger name="be.objectify" level="warn"/>
+	<logger name="java.sql" level="warn"/>
+	<logger name="com.avaje.ebean" level="warn"/>
+	<logger name="com.jolbox" level="warn"/>
+	
+	<logger name="com.avaje.ebean.config.PropertyMapLoader" level="OFF" />
+	<logger name="com.avaje.ebeaninternal.server.core.XmlConfigLoader" level="OFF" />
+	<logger name="com.avaje.ebeaninternal.server.lib.BackgroundThread" level="OFF" />
+	<logger name="com.gargoylesoftware.htmlunit.javascript" level="OFF" />
+	
+	<logger name="ScholasticDonationsLogger" level="debug" additivity="false">
+		<appender-ref ref="ScholasticDonations"/>   
+	</logger>
+	<logger name="ScholasticReceiptsLogger" level="debug" additivity="false">
+		<appender-ref ref="ScholasticReceipts"/>   
+	</logger>
+
+	<root level="info">
+		<appender-ref ref="stdout" />
+		<appender-ref ref="ScholasticWebApplication" />
+	</root>
+</configuration>

@@ -1,0 +1,27 @@
+# Users
+
+events:
+
+    - !!models.Event
+        id:       1
+        name:     Great Jogathon
+        slug:     great-jogathon
+        taxId:    111111111
+        imgUrl:   http://www.freeimageslive.com/galleries/sports/sportsgames/pics/football_rugby3050.jpg
+        heroImgUrl: http://www.freeimageslive.com/galleries/sports/sportsgames/pics/7shirt1.jpg
+        eventStart: 2014-01-10
+        schoolId:   1234
+        title:    New Event Title
+        content:  This is just some sample content
+        goal:   10000
+        userAdmin:
+            - !!models.User
+                id: 1
+        total:    8000
+        theme:    1
+        manyToOne:
+    userAdmin:
+      targetEntity: models.security.user
+      joinColumn:
+        name: user_admin_id
+        referencedColumnName: id
