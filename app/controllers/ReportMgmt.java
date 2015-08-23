@@ -460,9 +460,16 @@ public class ReportMgmt extends Controller {
 	public static Result participantReport(String event) throws IOException {
 		Event eventy=Event.findBySlug(event);
 		String sql =
-		"select name,(select distinct name from team where id=team_id) team," +
-				"emergency_contact ,emergency_contact_phone,goal,total " +
-				"from pfp where pfp_type=1 and event_id=:id";
+		"select	 pfp.Event, pfp.Name as 'Participant Name', " +
+				"pfp.AccountOwner as 'Account Owner',pfp.Team,count(*) as'Number of Donation'," +
+				"sum(amount) as'Total amount Raised',avg(amount) as'Average amount Raised'," +
+				"cast(pfp.date_created as Char) as 'Page Create Date' from donation	join " +
+				"(select id,(select distinct name from event where id= event_id) as 'Event'," +
+				"name,date_created,(select distinct concat(first_name,' ',last_name)" +
+				" from users where id=user_admin_id) as 'AccountOwner'," +
+				"(select distinct name from team where id=team_id) as 'Team'" +
+				"from pfp where pfp_type=1 and event_id=:id) pfp where donation.pfp_id =pfp.id " +
+				"group by pfp.id ";
 		SqlQuery bug = Ebean.createSqlQuery(sql)
 				       .setParameter("id", eventy.id);
 		List<SqlRow> list = bug.findList();
@@ -489,16 +496,17 @@ public class ReportMgmt extends Controller {
 	public static Result donationReport(String event) throws IOException {
 		Event eventy=Event.findBySlug(event);
 		String sql =
-		"select p.team,p.name participant,d.donor_name,d.amount,CAST(d.date_paid AS char) date_paid, "+
-				"case d.payment_type when 1 then 'credit' when 2 then 'check' when 3 then 'cash' end as payment_type "+
-				"from donation d join"+
-				"(select id,name,title,(select distinct name from team where id=pfp.team_id) " +
-				" team,event_id from pfp where pfp.pfp_type=1 ) p "+
-				"where d.status=2 "+
-				"and d.pfp_id=p.id "+
-				"and p.event_id=d.event_id "+
-				"and p.event_id=:id "+
-				"and d.donation_type=1";
+				"select	pfp.Team,pfp.name as 'Participant Name' ,pfp.AccountOwner as 'Account Owner'," +
+				"amount as 'Donation Amount'," +
+				"first_name as 'Donor First Name',last_name as 'Donor Last Name',email as 'Donor Email'," +
+				"phone as 'Donor Phone',date_created as 'Date Created',date_paid as 'Date Paid'," +
+				"case payment_type when 1 then 'credit' when 2 then 'check' when 3 then 'cash' end as 'payment_type'," +
+				"transaction_number	from donation	join " +
+						"(select id,name,(select distinct concat(first_name,' ',last_name)" +
+						"from users where id=user_admin_id) as 'AccountOwner'," +
+						"(select distinct name from team where id=team_id) as 'Team'" +
+						"from pfp where pfp_type=1 and event_id=:id) pfp	where donation.pfp_id =pfp.id " +
+						"and donation.status=2"; // all cleared  donation
 		SqlQuery bug = Ebean.createSqlQuery(sql)
 				.setParameter("id", eventy.id);
 		List<SqlRow> list = bug.findList();
@@ -521,11 +529,11 @@ public class ReportMgmt extends Controller {
 		Event eventy=Event.findBySlug(event);
 
 		String sql =
-				"select v.first_name,v.last_name, v.email,v.mobile,v.phone,"+
-				"a.name as shift_name,CAST(a.start_time AS char),CAST(a.end_time AS char) from "+
-				"(select id,date,name,start_time,end_time from shift where " +
-				"volunteers_id=(select id from volunteers where eventid=:id)) a join volunteer v on v.shift_id=a.id ";
-
+				"select CAST(a.date as date) as ' Date of Job ',CAST(a.start_time AS time) as 'START TIME'," +
+				"CAST(a.end_time AS time) as 'END TIME',a.name as 'Job Title',v.first_name as 'First Name'," +
+				"v.last_name as 'Last Name',v.email,v.phone,v.mobile,null as 'Check In ',null as 'Signature Box '" +
+				"from (select id,date,name,start_time,end_time from shift where " +
+				"volunteers_id=(select id from volunteers where eventid=:id)) a join volunteer v on v.shift_id=a.id";
 		SqlQuery bug = Ebean.createSqlQuery(sql)
 				.setParameter("id", eventy.id);
 		List<SqlRow> list = bug.findList();
@@ -568,7 +576,7 @@ public class ReportMgmt extends Controller {
 	public static Result donorReport(String event) throws IOException {
 		Event eventy=Event.findBySlug(event);
 		String sql =
-				"select donor_name,first_name,last_name,sum(amount) amount from donation " +
+				"select donor_name as 'Donor Name',first_name,last_name,sum(amount) amount from donation " +
 						"where event_id=:id and donation_type=1 group by id,donor_name order by sum(amount)desc";
 		SqlQuery bug = Ebean.createSqlQuery(sql)
 				.setParameter("id", eventy.id);
@@ -585,9 +593,13 @@ public class ReportMgmt extends Controller {
 	public static Result teamReport(String event) throws IOException {
 		Event eventy=Event.findBySlug(event);
 		String sql =
-		"select (select distinct name from team where id=team_id) team ,name " +
-				" participant_name,total from pfp " +
-				"where pfp_type=1 and event_id=:id";
+				"select (select distinct name from team where id=al.team_id) as 'Team Name', " +
+				"al.name as 'Participant Name' ,al.total as 'Amount'," +
+				"team.teamtot as 'Team Total' from " +
+				"(select team_id,name ,total from pfp where pfp_type=1 and event_id=:id)al join " +
+				"(select team_id,sum(total) as teamtot from pfp where pfp_type=1 and event_id=:id" +
+				" group by team_id ) team " +
+				"on al.team_id=team.team_id";
 		SqlQuery bug = Ebean.createSqlQuery(sql)
 				.setParameter("id", eventy.id);
 		List<SqlRow> list = bug.findList();

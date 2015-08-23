@@ -171,6 +171,7 @@
 							<h4 class="modal-title">Confirmation</h4>
 						</div>
 						<div class="modal-body ">
+							<h4 id="resultstatus">No result data</h4>
 							<table border="1" class="table table-bordered" cellpadding="10" id="reportPreviewTable">
 							</table>
 						</div>
@@ -201,6 +202,8 @@ $( document ).ready(function() {
     	  closeOnDateSelect:true,
     	  lazyInit:true
     	});
+
+
 
 
 
@@ -239,7 +242,13 @@ function addAllColumnHeaders(myList) {
 var reportName=null; // resolve duplication of report name
 
 $("#PreviewModal").on('show.bs.modal', function(event){
-           $("#reportPreviewTable").empty(); // **flush the entire content before appending , if users clicks the report button more than once
+
+        <!--$(document).ajaxStart(function () {-->
+          <!--}).ajaxStop(function () {-->
+          <!--$("#loadin").hide();-->
+         <!--});-->
+
+        $("#reportPreviewTable").empty(); // **flush the entire content before appending , if users clicks the report button more than once
         var link = $(event.relatedTarget.id);  // html object that triggered the modal
         var linkData = link.selector; // Extract value from selector -* attributes e.g. report name
         var linkDatamodified = linkData.replace(/Report/i, ' Report');// include a space in the string before word "REPORT"
@@ -253,8 +262,10 @@ $.getJSON('/reports/admin/'+linkData+'/'+$.urlParam('id'), function (data) {
 
     var columns = addAllColumnHeaders(data);
     convertcsvdata=data;
+
+
     for (var i = 0; i < data.length; i++) {
-        var row$ = $('<tr/>');
+        var row$ = $('<tr style="white-space: nowrap"/>');
 
         for (var colIndex = 0; colIndex < columns.length; colIndex++) {
             var cellValue = data[i][columns[colIndex]];
@@ -304,10 +315,25 @@ $.getJSON('/reports/admin/'+linkData+'/'+$.urlParam('id'), function (data) {
             row$.append($('<td/>').html(cellValue));
         }
         $("#reportPreviewTable").append(row$);
+
     }
+     if ($("#reportPreviewTable").find('td').length < 1)
+     {
+     $("#downloadreport").hide();
+     $("#resultstatus").show();
+     }
+     else{
+     $("#resultstatus").hide();
+     $("#downloadreport").show();
+     }
 });
 
+
 });
+
+
+
+
 
 // download report functionality
 
