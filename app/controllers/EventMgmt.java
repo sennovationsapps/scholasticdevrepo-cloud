@@ -923,6 +923,39 @@ public static Result updateParticipantsForEvent(Event event, Long participantsId
 				eventForm.get().imgUrl = imgUrlFile.getUrl();
 			}
 		}
+		final Http.MultipartFormData.FilePart imgUrlFilePart1 = body
+				.getFile("imgUrl1");
+		S3File imgUrlFile1 = null;
+		if (imgUrlFilePart != null) {
+			if (!ControllerUtil.isImage(imgUrlFilePart1.getFilename())) {
+				eventForm.reject("imgUrl1", ControllerUtil.IMAGE_ERROR_MSG);
+			} else if (ControllerUtil.isFileTooLarge(imgUrlFilePart1.getFile())) {
+				eventForm.reject("imgUrl1", ControllerUtil.IMAGE_SIZE_ERROR_MSG);
+			} else {
+				imgUrlFile1 = new S3File();
+				imgUrlFile1.name = ControllerUtil.decodeFileName(imgUrlFilePart1
+						.getFilename());
+				imgUrlFile1.file = imgUrlFilePart1.getFile();
+				eventForm.get().imgUrl1 = imgUrlFile1.getUrl();
+			}
+		}
+
+		final Http.MultipartFormData.FilePart imgUrlFilePart2 = body
+				.getFile("imgUrl2");
+		S3File imgUrlFile2 = null;
+		if (imgUrlFilePart != null) {
+			if (!ControllerUtil.isImage(imgUrlFilePart2.getFilename())) {
+				eventForm.reject("imgUrl2", ControllerUtil.IMAGE_ERROR_MSG);
+			} else if (ControllerUtil.isFileTooLarge(imgUrlFilePart2.getFile())) {
+				eventForm.reject("imgUrl2", ControllerUtil.IMAGE_SIZE_ERROR_MSG);
+			} else {
+				imgUrlFile2 = new S3File();
+				imgUrlFile2.name = ControllerUtil.decodeFileName(imgUrlFilePart2
+						.getFilename());
+				imgUrlFile2.file = imgUrlFilePart2.getFile();
+				eventForm.get().imgUrl2 = imgUrlFile2.getUrl();
+			}
+		}
 		// if(eventForm.get().fundraisingEnd != null) {
 		// eventForm.get().fundraisingEnd =
 		// EventMgmt.setDateToMidnight(eventForm.get().fundraisingEnd);
@@ -959,6 +992,12 @@ public static Result updateParticipantsForEvent(Event event, Long participantsId
 		}
 		if (imgUrlFile != null) {
 			imgUrlFile.save();
+		}
+		if (imgUrlFile1 != null) {
+			imgUrlFile1.save();
+		}
+		if (imgUrlFile2 != null) {
+			imgUrlFile2.save();
 		}
 		event.dateCreated = new Date();
 		event.save();
@@ -1042,6 +1081,40 @@ public static Result updateParticipantsForEvent(Event event, Long participantsId
 				eventForm.reject("imgUrl", ControllerUtil.IMAGE_ERROR_MSG);
 			}
 		}
+
+		final Http.MultipartFormData.FilePart imgUrlFilePart1 = body
+				.getFile("imgUrl1");
+		S3File imgUrlFile1 = null;
+		if (imgUrlFilePart1 != null) {
+			if (ControllerUtil.isImage(imgUrlFilePart1.getFilename())) {
+				imgUrlFile1 = new S3File();
+				imgUrlFile1.name = ControllerUtil.decodeFileName(imgUrlFilePart1
+						.getFilename());
+				imgUrlFile1.file = imgUrlFilePart1.getFile();
+				Logger.debug("IMAGE FILE SIZE - "
+						+ imgUrlFilePart1.getFile().length());
+				eventForm.get().imgUrl1 = imgUrlFile1.getUrl();
+			} else {
+				eventForm.reject("imgUrl1", ControllerUtil.IMAGE_ERROR_MSG);
+			}
+		}
+
+		final Http.MultipartFormData.FilePart imgUrlFilePart2 = body
+				.getFile("imgUrl2");
+		S3File imgUrlFile2 = null;
+		if (imgUrlFilePart2 != null) {
+			if (ControllerUtil.isImage(imgUrlFilePart2.getFilename())) {
+				imgUrlFile2 = new S3File();
+				imgUrlFile2.name = ControllerUtil.decodeFileName(imgUrlFilePart2
+						.getFilename());
+				imgUrlFile2.file = imgUrlFilePart2.getFile();
+				Logger.debug("IMAGE FILE SIZE - "
+						+ imgUrlFilePart2.getFile().length());
+				eventForm.get().imgUrl2 = imgUrlFile2.getUrl();
+			} else {
+				eventForm.reject("imgUrl2", ControllerUtil.IMAGE_ERROR_MSG);
+			}
+		}
 		// if(eventForm.get().fundraisingEnd != null) {
 		// eventForm.get().fundraisingEnd =
 		// EventMgmt.setDateToMidnight(eventForm.get().fundraisingEnd);
@@ -1063,6 +1136,18 @@ public static Result updateParticipantsForEvent(Event event, Long participantsId
 				S3File.delete(event.imgUrl);
 			}
 			imgUrlFile.save();
+		}
+		if (imgUrlFile1 != null) {
+			if(event.imgUrl1 != null) {
+				S3File.delete(event.imgUrl);
+			}
+			imgUrlFile1.save();
+		}
+		if (imgUrlFile2 != null) {
+			if(event.imgUrl2 != null) {
+				S3File.delete(event.imgUrl);
+			}
+			imgUrlFile2.save();
 		}
 		updatedEvent.update(event.id);
 		flash(ControllerUtil.FLASH_SUCCESS_KEY, "Event ["

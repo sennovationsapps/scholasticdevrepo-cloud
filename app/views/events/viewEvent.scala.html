@@ -465,11 +465,20 @@
       <div class="row">
         <div class="col-md-8 col-sm-6">
 					<h4>@event.title</h4>
-					@if(event.imgUrl != null) {
-        			<img src="@event.imgUrl"  alt="Event Photo" class="img-about img-responsive">
-        			}
+            <div id="slider" class="img-about">
+                @if(event.imgUrl != null) {
+                <img id = "one" src="@event.imgUrl" alt="Percent" class="img-responsive" >
+                }
+                @if(event.imgUrl1 != null) {
+                <img id = "two" src="@event.imgUrl1" alt="Percent" class="img-responsive" >
+                }
+                @if(event.imgUrl2 != null) {
+                <img id = "three" src="@event.imgUrl2" alt="Percent" class="img-responsive" >
+                }
+            </div>
         			@Html(event.content)
-        			<br />
+
+            <br />
           <div class="clearfix"></div>
 
             </div>
@@ -759,19 +768,16 @@ $('#volunteerModalBody').load(url, function() {
 
 
     <script>
-      //  var slider ;
+       var slider ;
 
  $(document ).ready(function() {
-
-
- /*slider = new IdealImageSlider.Slider({
+slider = new IdealImageSlider.Slider({
     selector: '#slider',
-    height: 200, // Required but can be set by CSS
     interval: 2000,
-
+    height : 300
 
 });
-slider.start();*/
+slider.start();
 
 var pathname = window.location.pathname;
 var url      = window.location.href;
