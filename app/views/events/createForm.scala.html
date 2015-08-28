@@ -49,13 +49,11 @@
 	            @text(eventForm("fundraisingStart"), '_label -> "Fundraising Start Date", 'class -> "form-control", '_info -> "helpEventFundStart")
 	            @text(eventForm("fundraisingEnd"), '_label -> "Fundraising End Date", 'class -> "form-control", '_info -> "helpEventFundEnd")
 	            @text(eventForm("goal"), '_label -> "Fundraising Goal", 'class -> "form-control", '_addon -> "$", 'placeholder -> "50000", '_info -> "helpGoal")
-	            @select(eventForm("state"), options(ControllerUtil.STATE_MAP), '_label -> "State", 'class -> "form-control")
+	            @select(eventForm("state"), options(ControllerUtil.STATE_MAP), '_label -> "State", '_showConstraints -> false,'class -> "form-control")
 	            @text(eventForm("city"), '_label -> "City", 'class -> "form-control")
-	            @text(eventForm("zipCode"), '_label -> "Zip Code", 'class -> "form-control", 'placeholder -> "Zip Code (55555 or 55555-4444)", '_info -> "helpHeroImgUrl")
+	            @text(eventForm("zipCode"), '_label -> "Zip Code",'_showConstraints -> false, 'class -> "form-control", 'placeholder -> "Zip Code (55555 or 55555-4444)", '_info -> "helpHeroImgUrl")
 	            @helper.inputFile(eventForm("heroImgUrl"), '_label -> "Add a picture to the top of you event page (Optional)", 'class -> "form-control", '_info -> "helpHeroImgUrl")
 	            @helper.inputFile(eventForm("imgUrl"), '_label -> "Add a smaller image next to your event message (Optional)", 'class -> "form-control", '_info -> "helpImgUrl")
-                @helper.inputFile(eventForm("imgUrl1"), '_label -> "Add a smaller image next to your event message (Optional)", 'class -> "form-control", '_info -> "helpImgUrl")
-                @helper.inputFile(eventForm("imgUrl2"), '_label -> "Add a smaller image next to your event message (Optional)", 'class -> "form-control", '_info -> "helpImgUrl")
 	            @helper.textarea(eventForm("content"), '_label -> "Welcome Message", 'class -> "form-control", '_wysiwyg -> true, '_info -> "helpContent")
 	            
 	            <!-- TODO create a dropdown selection for how many teams to add -->

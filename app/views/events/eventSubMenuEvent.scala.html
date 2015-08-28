@@ -121,7 +121,7 @@
 						<div class="form-group">
 
 							<div class="input-group">
-								<input type="search" class="form-control" id="searchbox"  name="f" value="@currentFilter" style="width:86%; height: auto;" placeholder="Search Participant..">
+								<input type="search" class="form-control" id="searchbox"  name="f" value="@currentFilter" style="width:170px; height: auto;" placeholder="Search Participant..">
 								<span class="input-group-btn">
 									<div class="btn-group">
 										<button type="button" class="btn btn-blue dropdown-toggle" data-toggle="dropdown" id = "search">Search <span class="caret"></span></button>
@@ -149,12 +149,17 @@
 						</div>
 
 					</div>
-					<div class="col-lg-2 pull-left ">
-						<div class="form-group">
-							<input type="hidden" name="n" value="name" id="searchField"/>
-							<a href="#" class="btn btn-default" type="button" id="remove">Remove Filter</a>
+
+						<!---------------search criteria for normal user -------start------25.08.2015---------------------------------------------->
+					@if(ControllerUtil.getLocalUser(session())!=null) {
+						<div class="col-lg-2 pull-left ">
+							<div class="form-group">
+								<input type="hidden" name="n" value="name" id="searchField"/>
+								<a href="#" class="btn btn-default" type="button" id="remove">Remove Filter</a>
+							</div>
 						</div>
-					</div>
+					}
+						<!---------------search criteria for normal user -------end------25.08.2015---------------------------------------------->
 				</form>
 
 					<!--End Code of T-260 -->

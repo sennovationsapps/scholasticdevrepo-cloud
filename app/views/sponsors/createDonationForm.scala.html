@@ -7,7 +7,26 @@
 @main("Create Donation") {
 <!-- Main body
 ================== -->
-  <div class="wrapper">
+
+    <style>
+    .input-group-addon:first-child {
+    border-right: 0px none;
+    font-size: 14px;
+    }
+
+
+    /*.input-group {
+    position: relative;
+    display: table;
+    border-collapse: separate;
+    }*/
+
+    </style>
+
+
+
+
+    <div class="wrapper">
     <div class="section-header">
       <div class="container">
         <div class="row">
@@ -48,7 +67,40 @@
             @text(donationForm("lastName"), '_label -> "Your Last Name", 'class -> "form-control")
             @text(donationForm("email"), '_label -> "Email", 'class -> "form-control")
            @* @text(donationForm("phone"), '_label -> "Phone", 'class -> "form-control", 'title -> "10 digits (numeric only)")*@
-			@text(donationForm("phone"), '_label -> "Phone", 'id -> "phNo", 'class -> "form-control", '_addon -> "glyphicon-earphone", 'placeholder -> "Phone: 555-555-1212 (only numbers)", 'title -> "10 digits and numeric only  and the format will be like example(ex.123-345-5678)")
+
+
+               @* <div style="display:none">
+                @text(donationForm("phone"), '_label -> "Phone", 'id -> "phNo", 'class -> "form-control", '_addon -> "glyphicon-earphone", 'placeholder -> "Phone: 555-555-1212 (only numbers)", 'title -> "10 digits and numeric only  and the format will be like example(ex.123-345-5678)")
+
+
+                </div>
+
+
+                *@@******phno format*************24.08.2015***************end*****@@*
+                <div>
+                    <b>Phone(Required)</b>
+                </div>
+
+                <div>
+                    <table>
+                        <tr>
+                            <td>
+
+                                    <input type="text" onkeyup="autoFormAdvance(3,'areaCode','phonePre')" id="areaCode" maxlength="3" size="3"/>
+                            </td>
+                            <td> - </td>
+                            <td><input type="text" onkeyup="autoFormAdvance(3,'phonePre','phoneSuf')" id="phonePre" maxlength="3" size="3" /></td>
+                            <td> - </td>
+                            <td> <input type="text" id="phoneSuf" onkeyup="mergeTotalPhNo()"  maxlength="4" size="4"/></td>
+                        </tr>
+                    </table>
+                </div>
+
+
+                    <br />
+*@
+
+                   @text(donationForm("phone"), '_label -> "Phone", 'id -> "phNo", 'class -> "form-control", '_addon -> "glyphicon-earphone", 'placeholder -> "Phone: 555-555-1212 (only numbers)", 'title -> "10 digits and numeric only  and the format will be like example(ex.123-345-5678)")
 				@helper.inputFile(donationForm("imgUrl"), '_label -> "Add a smaller image next to your fundraising message (Optional)", 'class -> "form-control", '_info -> "helpImgUrl")
 				@text(donationForm("webUrl"), '_label -> "Website url", 'class -> "form-control", 'title -> "(Website url)")
 
@@ -343,5 +395,86 @@ else{
    });
   </script>
 
+
+
+    <script>
+        //============================phno partition validation ====================================24.08.2015==========start========================================//
+$(document).ready(function(){
+/*$("#phNo").hide();*/
+var phNoValue = $("#phNo").val();
+//alert("phNoValue :: "+phNoValue);
+var phNoValuePart1;
+var phNoValuePart2;
+var phNoValuePart3;
+
+if(phNoValue!= null){
+phNoValuePart1  = phNoValue.substring(0,3);
+$("#areaCode").val(phNoValuePart1);
+phNoValuePart2 = phNoValue.substring(3,6);
+$("#phonePre").val(phNoValuePart2);
+phNoValuePart3 = phNoValue.substring(6,10);
+$("#phoneSuf").val(phNoValuePart3);
+}
+});
+
+function autoFormAdvance(afterNumChars,currentFormId,nextFormId) {
+/*if(currentFormId.equals("phoneSuf")){
+$("#phoneSuf").onkeyup();
+}*/
+patternMatchForPhone(currentFormId);
+
+	if(document.getElementById(currentFormId).value.length==afterNumChars) {
+		document.getElementById(nextFormId).focus();
+	}
+
+
+}
+
+function mergeTotalPhNo(){
+//alert("within keyup");
+patternMatchForPhone('phoneSuf');
+var totalPhValue;
+var length = $("#phoneSuf").val().length;
+
+if(length == 4){
+totalPhValue = $("#areaCode").val()+$("#phonePre").val()+$("#phoneSuf").val();
+$("#phNo").val(totalPhValue);
+//alert($("#phNo").val());
+}
+
+//alert("totalPhValue :: "+totalPhValue);
+
+
+}
+
+        //============================phno partition validation ====================================24.08.2015==========end========================================//
+    </script>
+
+
+
+
+    <script>
+    function patternMatchForPhone(id){
+
+    var phPattern = /^([0-9])+$/;
+    var phValue =document.getElementById(id).value;
+    //alert(phValue );
+    //alert(phValue.match(phPattern));
+    if(phValue.match(phPattern)==null){
+    //alert("before "+phValue);
+     phValue = phValue.substring(0,phValue.length-1);
+    // alert("after "+phValue);
+     }
+     id = "#"+id;
+     // alert("id :: "+id);
+     $(id).val(phValue);
+
+     //alert(" $(id).val"+ $(id).val);
+    //alert(ph)
+
+     //document.getElementById(id).HTML(phValue);
+
+    }
+</script>
 
 }

@@ -510,10 +510,10 @@ public class User extends Model implements Subject {
 	/*****************new addition******for partial search of email*********19.08.2015**********start*******/
 	private static ExpressionList<User> getEmailUserFindByPartialValue(final String emailValue) {
 		System.out.println("within getEmailUserFindByPartialValue :: " + emailValue);
-		ExpressionList<User> user=find.where().eq("active", true).like("email", "%"+emailValue+"%");
+		ExpressionList<User> user=find.where().eq("active", true).like("email",emailValue+"%");
 		//System.out.println("-------------Size of mail search-----------"+user.);
 
-		return find.where().eq("active", true).like("email", "%" + emailValue + "%");
+		return find.where().eq("active", true).like("email",emailValue + "%");
 	}
 	/*****************new addition******for partial search of email*********19.08.2015***********end********/
 
@@ -566,13 +566,13 @@ public class User extends Model implements Subject {
 
 
 	private static ExpressionList<User>  getFirstUserFind(String first){
-		return find.where().eq("active", true).like("LCASE(firstName)", "%"+first.toLowerCase()+"%");
+		return find.where().eq("active", true).like("LCASE(firstName)", first.toLowerCase()+"%");
 
 	}
 
 
 	private static ExpressionList<User>  getLastUserFind(String last){
-		return find.where().eq("active", true).like("LCASE(lastName)", "%"+last.toLowerCase()+"%");
+		return find.where().eq("active", true).like("LCASE(lastName)", last.toLowerCase()+"%");
 
 	}
 

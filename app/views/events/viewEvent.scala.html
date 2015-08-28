@@ -1,4 +1,4 @@
-@(event: Event, isEventOpen: Boolean, canParticipate: Boolean, canManage: Boolean, pfpDonations: Map[Long, Donation.DonationsByPfp], teamDonations: Map[Long, Donation.DonationsByTeam],currentPage: com.avaje.ebean.Page[Pfp]=null, currentSortBy: String=null, currentOrder: String=null, currentFilter: String=null)
+@(event: Event, isEventOpen: Boolean, canParticipate: Boolean, canManage: Boolean, pfpDonations: Map[Long, Donation.DonationsByPfp], teamDonations: Map[Long, Donation.DonationsByTeam],currentPage: com.avaje.ebean.Page[Pfp]=null, currentSortBy: String=null, currentOrder: String=null, currentFilter: String=null,donation: List[Donation]=null,imgUrllink: Integer)
 @import  views.html.events.modalVolunteer;
 
 
@@ -87,8 +87,11 @@
         }
     }
 
-    <input type="hidden" id = "eventName" value="@event.name">
-    <input type="hidden" id = "eventContent" value="@event.content">
+    <input type="hidden" id = "eventName" value="@event.name Fundraising Page">
+   @* <input type="hidden" id = "eventContent" value="@Html(event.content)">*@
+
+    <input type="hidden" id = "eventContent" value=" ">
+
 
 
     <!-- End of FB Share -->
@@ -300,7 +303,16 @@
                               ){*@
 
 
-                                  <td><a href="@routes.PfpMgmt.get(pfp.event, pfp)">@pfp.name</a></td>
+                                  <td>@*<a href="@routes.PfpMgmt.get(pfp.event, pfp)">@pfp.name</a>*@
+                                      @if(pfp.privateAcct == true){
+                                          <a href="@routes.PfpMgmt.get(pfp.event, pfp)" style="color: black">@pfp.name</a>
+                                      }
+                                      @if(pfp.privateAcct == false){
+                                          <a href="@routes.PfpMgmt.get(pfp.event, pfp)">@pfp.name</a>
+                                      }
+
+
+                                  </td>
                                   <td>@if(pfp.privateAcct == true){Private}else{Public}</td>
                                   @if(pfp.team == null) {
                                       <td></td>
@@ -441,6 +453,8 @@
       }
 
       }else{
+     <!---commented out--------------------------- because dont want to see the div without searching--25.08.2015-----start-->
+     @*
      <div class="container">
          <div class="row">
 
@@ -449,7 +463,8 @@
              </div>
 
          </div>
-     </div>
+     </div>*@
+     <!---commented out--------------------------- because dont want to see the div without searching--25.08.2015-----start-->
  }
 
 
@@ -463,22 +478,13 @@
     <br/>
     <div class="container">
       <div class="row">
-        <div class="col-md-8 col-sm-6">
+        <div class="col-md-8 col-sm-6" id = "eventdetails">
 					<h4>@event.title</h4>
-            <div id="slider" class="img-about">
-                @if(event.imgUrl != null) {
-                <img id = "one" src="@event.imgUrl" alt="Percent" class="img-responsive" >
-                }
-                @if(event.imgUrl1 != null) {
-                <img id = "two" src="@event.imgUrl1" alt="Percent" class="img-responsive" >
-                }
-                @if(event.imgUrl2 != null) {
-                <img id = "three" src="@event.imgUrl2" alt="Percent" class="img-responsive" >
-                }
-            </div>
+					@if(event.imgUrl != null) {
+        			<img src="@event.imgUrl"  alt="Event Photo" class="img-about img-responsive">
+        			}
         			@Html(event.content)
-
-            <br />
+        			<br />
           <div class="clearfix"></div>
 
             </div>
@@ -572,7 +578,7 @@
                        }
                        var eventName=document.getElementById('eventName').value;
                        var desc=document.getElementById('eventContent').value;
-
+                        alert("desc :: "+desc);
                        FB.ui(
                               {
                                 method: 'feed',
@@ -714,7 +720,123 @@
                     </div>
       </div>
     </div>
+
+
+        @if(donation.size>0){
+
+
+            <div id = "image_slider" style="width: 100%; margin: 0px auto;">
+                <div id="slider">
+
+
+
+
+
+                 <marquee behavior="scroll" direction="left" id = "slider_marquee" onMouseOver="StopMarquee();" onMouseOut="StartMarquee()">
+
+                <table >
+
+
+
+
+
+
+                    <tr>
+
+                    @for(donationvalue <- donation) {
+                        @if(donationvalue.imgUrl != null) {
+                            @if(imgUrllink ==1) {
+                             <td>
+
+                             <a href = "https://@donationvalue.webUrl" target="_blank"><img id = "one" src="@donationvalue.imgUrl"  onclick="getWebUrlOnImage()" alt="Percent" class="img-responsive" alt="Percent" height="100px"></a>
+                                     </td>
+                                <td style="width: 20px;">
+
+                                </td>
+                                <td>
+                               @* <a href = "https://@donationvalue.webUrl" target="_blank"><img id = "one" src="@donationvalue.imgUrl" onclick="getWebUrlOnImage()" alt="Percent" class="img-responsive" alt="Percent" height="100px"></a>
+                                      </td>
+                                <td style="width: 20px;">
+
+                                </td>
+*@
+                            }
+                            @if(imgUrllink !=1) {
+                                <td>
+                                <a href = "https://@donationvalue.webUrl" target="_blank"> <img id = "one" src="@donationvalue.imgUrl" onclick="getWebUrlOnImage()" alt="Percent" class="img-responsive" alt="Percent" height="100px"></a>
+                                    </td>
+                                <td style="width: 20px;">
+
+                                </td>
+
+                                }
+
+                            @* <img id = "two"  src="@ControllerUtil.getResourceRoute("progress/Progress Tree 60.png")" alt="Percent" class="img-responsive" alt="Percent" height="100px">
+                            <img id = "three" src="@ControllerUtil.getResourceRoute("progress/Progress Tree 120.png")" alt="Percent" class="img-responsive" alt="Percent" height="100px">*@
+
+                        }
+                    }
+                    </tr>
+                </table>
+
+
+
+
+                    </marquee>
+
+
+                  @* @for(donationvalue <- donation) {
+                        @if(donationvalue.imgUrl != null) {
+                            @if(imgUrllink ==1) {
+                                <a href = "https://@donationvalue.webUrl" target="_blank"><img id = "one" src="@donationvalue.imgUrl"  onclick="getWebUrlOnImage()" alt="Percent" class="img-responsive" alt="Percent" height="100px"></a>
+
+                                <a href = "https://@donationvalue.webUrl" target="_blank"><img id = "one" src="@donationvalue.imgUrl" onclick="getWebUrlOnImage()" alt="Percent" class="img-responsive" alt="Percent" height="100px"></a>
+
+
+                            }
+                            @if(imgUrllink !=1) {
+
+                                <a href = "https://@donationvalue.webUrl" target="_blank"> <img id = "one" src="@donationvalue.imgUrl" onclick="getWebUrlOnImage()" alt="Percent" class="img-responsive" alt="Percent" height="100px"></a>
+
+
+                                }
+
+                            *@@* <img id = "two"  src="@ControllerUtil.getResourceRoute("progress/Progress Tree 60.png")" alt="Percent" class="img-responsive" alt="Percent" height="100px">
+                            <img id = "three" src="@ControllerUtil.getResourceRoute("progress/Progress Tree 120.png")" alt="Percent" class="img-responsive" alt="Percent" height="100px">
+*@@*
+                        }
+                    }*@
+
+
+
+                </div>
+
+            </div>
+
+
+
+
+        }
     </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
      @* <div id = "image_slider">
           <div id="slider">
 
@@ -768,13 +890,16 @@ $('#volunteerModalBody').load(url, function() {
 
 
     <script>
-       var slider ;
+      //  var slider ;
 
  $(document ).ready(function() {
-slider = new IdealImageSlider.Slider({
+
+
+ slider = new IdealImageSlider.Slider({
     selector: '#slider',
+    height: 200, // Required but can be set by CSS
     interval: 2000,
-    height : 300
+
 
 });
 slider.start();
@@ -842,11 +967,10 @@ $("#url_sharetweet").attr("href", "http://twitter.com/intent/tweet?text=&url="+u
 
 
     <script>
-       /* $("#slider").mouseenter(function(mouseEvent){
+       $("#slider").mouseenter(function(mouseEvent){
    //alert("You entered slider!");
 
     slider.stop();
-
 
      });
 
@@ -867,10 +991,23 @@ $("#url_sharetweet").attr("href", "http://twitter.com/intent/tweet?text=&url="+u
      slider.start();
 
      });
-*/
 
 
 
+
+    </script>
+
+
+
+
+
+    <script>
+    $(".iis-slide .iis-current-slide").onclick(function(){
+    alert("on image click")
+    })
+        function getWebUrlOnImage(){
+        alert("webUrl  "+webUrl);
+        }
     </script>
    @* <script>
         //===new add for view event link
@@ -881,4 +1018,55 @@ $("#url_sharetweet").attr("href", "http://twitter.com/intent/tweet?text=&url="+u
        $("#tableOnSearch").hide();
        }
     </script>*@
+
+    <script>
+
+function StartMarquee(){
+
+//alert("within start marquee");
+if(navigator.userAgent.indexOf("Firefox") != -1 )
+    {
+
+var marquee = document.getElementById ("marquee");
+marquee.setAttribute('scrollamount', 6, 0);	;
+    }
+
+else {
+var marquee = document.getElementById ("marquee");
+ marquee.start();
+	}
+
+
+
+ }
+
+
+
+function StopMarquee(){
+//alert("within stop marquee");
+if(navigator.userAgent.indexOf("Firefox") != -1)
+    {
+
+var marquee = document.getElementById ("marquee");
+marquee.setAttribute('scrollamount', 0, 0);	;
+    }
+
+	else {
+
+var marquee = document.getElementById ("marquee");
+marquee.stop();
+
+		}
+
+ }
+
+
+
+
+</script>
+<script>
+
+</script>
+
+
 }

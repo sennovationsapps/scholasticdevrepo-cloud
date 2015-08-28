@@ -11,7 +11,7 @@
         <div class="row">
           <div class="col-md-12">
             <!-- Remove the .animated class if you don't want things to move -->
-            <h1 class="animated slideInLeft"><span>Create PFP</span></h1>
+            <h1 class="animated slideInLeft"><span>Create Fundraising Page</span></h1>
           </div>
         </div>
       </div>
@@ -38,11 +38,36 @@
     		@if(ControllerUtil.getLocalUser(session()).isRootAdmin()) {
           			@text(pfpForm("userAdmin.email"), '_label -> "Pfp Admin", 'class -> "form-control")	
           	}
-            @text(pfpForm("name"), '_label -> "Personal Fundraising Page (PFP) Name", 'class -> "form-control", 'placeholder -> "Name (i.e., Jason T., Thomspon Family, Jason Thompson)", '_info -> "helpPfpName")
+            @text(pfpForm("name"), '_label -> "Name for Personal Fundraising Page", 'class -> "form-control", 'placeholder -> "Name (i.e., Jason T., Thomspon Family, Jason Thompson)", '_info -> "helpPfpName")
             @text(pfpForm("goal"), '_label -> "Fundraising Goal", 'class -> "form-control", '_addon -> "$", 'placeholder -> "250", '_info -> "helpGoal")
             @text(pfpForm("emergencyContact"), '_label -> "Emergency Contact", 'class -> "form-control", '_addon -> "glyphicon-user", 'placeholder -> "Name")
 
+
+        <div style="display:none">
         @text(pfpForm("emergencyContactPhone"), '_label -> "Emergency Contact Phone Number(Optional)", 'id -> "phNo", 'class -> "form-control", '_addon -> "glyphicon-earphone", 'placeholder -> "555-555-1212 (only numbers)", 'title -> "10 digits and numeric only  ")
+
+
+        </div>
+
+
+        @******phno format*************24.08.2015***************end*****@
+        <div>
+            <b>Emergency Contact Phone Number(Optional)</b>
+        </div>
+
+        <div>
+            <table>
+                <tr>
+                    <td><input type="text" onkeyup="autoFormAdvance(3,'areaCode','phonePre')" id="areaCode" maxlength="3" size="3"/></td>
+                    <td> - </td>
+                    <td><input type="text" onkeyup="autoFormAdvance(3,'phonePre','phoneSuf')" id="phonePre" maxlength="3" size="3" /></td>
+                    <td> - </td>
+                    <td> <input type="text" id="phoneSuf" onkeyup="mergeTotalPhNo()"  maxlength="4" size="4"/></td>
+                </tr>
+            </table>
+        </div>
+
+       @* @text(pfpForm("emergencyContactPhone"), '_label -> "Emergency Contact Phone Number(Optional)", 'id -> "phNo", 'class -> "form-control", '_addon -> "glyphicon-earphone", 'placeholder -> "555-555-1212 (only numbers)", 'title -> "10 digits and numeric only  ")*@
 
 
            @* @text(pfpForm("emergencyContactPhone"), '_label -> "Emergency Contact Phone Number", 'class -> "form-control", '_addon -> "glyphicon-earphone", 'placeholder -> "555-555-1212 (only numbers)", 'title -> "10 digits (numeric only)")*@
@@ -278,6 +303,86 @@ else{
    });
   </script>
 
+
+    <script>
+        //============================phno partition validation ====================================24.08.2015==========start========================================//
+$(document).ready(function(){
+/*$("#phNo").hide();*/
+var phNoValue = $("#phNo").val();
+//alert("phNoValue :: "+phNoValue);
+var phNoValuePart1;
+var phNoValuePart2;
+var phNoValuePart3;
+
+if(phNoValue!= null){
+phNoValuePart1  = phNoValue.substring(0,3);
+$("#areaCode").val(phNoValuePart1);
+phNoValuePart2 = phNoValue.substring(3,6);
+$("#phonePre").val(phNoValuePart2);
+phNoValuePart3 = phNoValue.substring(6,10);
+$("#phoneSuf").val(phNoValuePart3);
+}
+});
+
+function autoFormAdvance(afterNumChars,currentFormId,nextFormId) {
+/*if(currentFormId.equals("phoneSuf")){
+$("#phoneSuf").onkeyup();
+}*/
+patternMatchForPhone(currentFormId);
+
+	if(document.getElementById(currentFormId).value.length==afterNumChars) {
+		document.getElementById(nextFormId).focus();
+	}
+
+mergeTotalPhNo();
+}
+
+function mergeTotalPhNo(){
+//alert("within keyup");
+patternMatchForPhone('phoneSuf');
+var totalPhValue;
+var length1 = $("#areaCode").val().length;
+var length2 = $("#phonePre").val().length;
+var length3 = $("#phoneSuf").val().length;
+
+if(length1==3 && length2 ==3 &&length3 == 4){
+totalPhValue = $("#areaCode").val()+$("#phonePre").val()+$("#phoneSuf").val();
+$("#phNo").val(totalPhValue);
+//alert($("#phNo").val());
+}
+
+//alert("totalPhValue :: "+totalPhValue);
+
+
+}
+
+        //============================phno partition validation ====================================24.08.2015==========end========================================//
+    </script>
+
+
+    <script>
+    function patternMatchForPhone(id){
+
+    var phPattern = /^([0-9])+$/;
+    var phValue =document.getElementById(id).value;
+    //alert(phValue );
+    //alert(phValue.match(phPattern));
+    if(phValue.match(phPattern)==null){
+    //alert("before "+phValue);
+     phValue = phValue.substring(0,phValue.length-1);
+    // alert("after "+phValue);
+     }
+     id = "#"+id;
+     // alert("id :: "+id);
+     $(id).val(phValue);
+
+     //alert(" $(id).val"+ $(id).val);
+    //alert(ph)
+
+     //document.getElementById(id).HTML(phValue);
+
+    }
+</script>
 
 
 }

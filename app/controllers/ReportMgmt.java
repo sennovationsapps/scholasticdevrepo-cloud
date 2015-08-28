@@ -50,14 +50,14 @@ public class ReportMgmt extends Controller {
 
 	/**
 	 * Donations report.
-	 * 
+	 *
 	 * @return the result
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
 	@Restrict({ @Group(SecurityRole.ROOT_ADMIN),
-		@Group(SecurityRole.SYS_ADMIN), @Group(SecurityRole.EVENT_ADMIN),
-		@Group(SecurityRole.EVENT_ASSIST) })
+			@Group(SecurityRole.SYS_ADMIN), @Group(SecurityRole.EVENT_ADMIN),
+			@Group(SecurityRole.EVENT_ASSIST) })
 	@SubjectPresent(content = "/login")
 	public static Result adminDonationsReport(Event event) throws IOException {
 		Map<String, String> requestData = Form.form().bindFromRequest().data();
@@ -96,17 +96,17 @@ public class ReportMgmt extends Controller {
 		response().setContentType("text/csv");
 		return ok(file).as("text/csv");
 	}
-	
+
 	/**
 	 * Donations report.
-	 * 
+	 *
 	 * @return the result
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
 	@Restrict({ @Group(SecurityRole.ROOT_ADMIN),
-		@Group(SecurityRole.SYS_ADMIN), @Group(SecurityRole.EVENT_ADMIN),
-		@Group(SecurityRole.EVENT_ASSIST) })
+			@Group(SecurityRole.SYS_ADMIN), @Group(SecurityRole.EVENT_ADMIN),
+			@Group(SecurityRole.EVENT_ASSIST) })
 	@SubjectPresent(content = "/login")
 	public static Result adminVolunteersReport(Event event) throws IOException {
 		Map<String, String> requestData = Form.form().bindFromRequest().data();
@@ -135,17 +135,17 @@ public class ReportMgmt extends Controller {
 		response().setContentType("text/csv");
 		return ok(file).as("text/csv");
 	}
-	
+
 	/**
 	 * Donations report.
-	 * 
+	 *
 	 * @return the result
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
 	@Restrict({ @Group(SecurityRole.ROOT_ADMIN),
-		@Group(SecurityRole.SYS_ADMIN), @Group(SecurityRole.EVENT_ADMIN),
-		@Group(SecurityRole.EVENT_ASSIST) })
+			@Group(SecurityRole.SYS_ADMIN), @Group(SecurityRole.EVENT_ADMIN),
+			@Group(SecurityRole.EVENT_ASSIST) })
 	@SubjectPresent(content = "/login")
 	public static Result adminPfpsReport(Event event) throws IOException {
 		Map<String, String> requestData = Form.form().bindFromRequest().data();
@@ -171,10 +171,10 @@ public class ReportMgmt extends Controller {
 		response().setContentType("text/csv");
 		return ok(file).as("text/csv");
 	}
-	
+
 //	/**
 //	 * Donations report.
-//	 * 
+//	 *
 //	 * @return the result
 //	 * @throws IOException
 //	 *             Signals that an I/O exception has occurred.
@@ -201,10 +201,10 @@ public class ReportMgmt extends Controller {
 //		response().setContentType("text/csv");
 //		return ok(file).as("text/csv");
 //	}
-//	
+//
 //	/**
 //	 * Donations report.
-//	 * 
+//	 *
 //	 * @return the result
 //	 * @throws IOException
 //	 *             Signals that an I/O exception has occurred.
@@ -231,10 +231,10 @@ public class ReportMgmt extends Controller {
 //		response().setContentType("text/csv");
 //		return ok(file).as("text/csv");
 //	}
-//	
+//
 //	/**
 //	 * Donations report.
-//	 * 
+//	 *
 //	 * @return the result
 //	 * @throws IOException
 //	 *             Signals that an I/O exception has occurred.
@@ -268,7 +268,7 @@ public class ReportMgmt extends Controller {
 
 	/**
 	 * To string array.
-	 * 
+	 *
 	 * @param donations
 	 *            the donations
 	 * @return the list
@@ -282,7 +282,7 @@ public class ReportMgmt extends Controller {
 			String datePaid = "";
 			String dateCreated = "";
 			String teamName = "";
-			
+
 			if(donation.datePaid != null) {
 				datePaid = new SimpleDateFormat("MM/dd/yyyy").format(donation.datePaid);
 			}
@@ -304,16 +304,16 @@ public class ReportMgmt extends Controller {
 				records.add(new String[] { donation.event.name, "none",
 						teamName, donation.firstName, donation.lastName, donation.zipCode + "", donation.email, donation.phone, donation.donationType.value, dateCreated, datePaid, donation.paymentType.value, donation.status.value, donation.amount + "", donation.transactionNumber });
 			} else {
-				records.add(new String[] { donation.event.name, donation.pfp.name, 
+				records.add(new String[] { donation.event.name, donation.pfp.name,
 						teamName, donation.firstName, donation.lastName, donation.zipCode + "", donation.email, donation.phone, donation.donationType.value, dateCreated, datePaid, donation.paymentType.value, donation.status.value, donation.amount + "", donation.transactionNumber });
 			}
 		}
 		return records;
 	}
-	
+
 	/**
 	 * To string array.
-	 * 
+	 *
 	 * @param donations
 	 *            the donations
 	 * @return the list
@@ -337,12 +337,12 @@ public class ReportMgmt extends Controller {
 				pfpDonations.put(donation.pfp.id, pfpDonation);
 			}
 		}
-		
+
 		for(Long key: pfpDonations.keySet()) {
 			String datePaid = "";
 			String dateCreated = "";
 			String teamName = "";
-			
+
 			Donation donation = pfpDonations.get(key);
 			if(donation.datePaid != null) {
 				datePaid = new SimpleDateFormat("MM/dd/yyyy").format(donation.datePaid);
@@ -365,7 +365,7 @@ public class ReportMgmt extends Controller {
 				records.add(new String[] { donation.event.name, "none",
 						teamName, donation.firstName, donation.lastName, donation.zipCode + "", donation.email, donation.phone, donation.donationType.value, dateCreated, datePaid, donation.paymentType.value, donation.status.value, donation.transactionNumber, donation.donationTotal + "", donation.donationCount + "" });
 			} else {
-				records.add(new String[] { donation.event.name, donation.pfp.name, 
+				records.add(new String[] { donation.event.name, donation.pfp.name,
 						teamName, donation.firstName, donation.lastName, donation.zipCode + "", donation.email, donation.phone, donation.donationType.value, dateCreated, datePaid, donation.paymentType.value, donation.status.value, donation.transactionNumber, donation.donationTotal + "", donation.donationCount + "" });
 			}
 		}
@@ -374,7 +374,7 @@ public class ReportMgmt extends Controller {
 
 	/**
 	 * To string array.
-	 * 
+	 *
 	 * @param donations
 	 *            the donations
 	 * @return the list
@@ -388,7 +388,7 @@ public class ReportMgmt extends Controller {
 			String shiftDate = "";
 			String shiftStartTime = "";
 			String shiftEndTime = "";
-			
+
 			if(shift.date != null) {
 				shiftDate = new SimpleDateFormat("MM/dd/yyyy").format(shift.date);
 			}
@@ -404,15 +404,15 @@ public class ReportMgmt extends Controller {
 			}
 			for(int count = shift.volunteerList.size() + 1; count <= shift.volunteerCount; count++) {
 				records.add(new String[] { shiftDate, shiftStartTime, shiftEndTime, shift.name, shift.volunteerCount + "", "Available", "",
-								"", "", "" });
+						"", "", "" });
 			}
 		}
 		return records;
 	}
-	
+
 	/**
 	 * To string array.
-	 * 
+	 *
 	 * @param donations
 	 *            the donations
 	 * @return the list
@@ -425,7 +425,7 @@ public class ReportMgmt extends Controller {
 		for(Pfp pfp: pfps) {
 			String dateCreated = "";
 			String teamName = "";
-			
+
 			if(pfp.dateCreated != null) {
 				dateCreated = new SimpleDateFormat("MM/dd/yyyy").format(pfp.dateCreated);
 			}
@@ -441,12 +441,12 @@ public class ReportMgmt extends Controller {
 				}
 			}
 			records.add(new String[] { pfp.name, dateCreated + "", pfp.goal + "", pfp.emergencyContact, pfp.emergencyContactPhone, pfp.pfpType.value,
-							teamName, pfp.event.name, pfp.userAdmin.firstName + " " + pfp.userAdmin.lastName, pfp.userAdmin.email, pfp.userAdmin.phone });
+					teamName, pfp.event.name, pfp.userAdmin.firstName + " " + pfp.userAdmin.lastName, pfp.userAdmin.email, pfp.userAdmin.phone });
 		}
 		return records;
 	}
 
-/**
+	/**
 	 * Participant  report (added Suvadeep Datta).
 	 *
 	 * @return the result
@@ -460,18 +460,18 @@ public class ReportMgmt extends Controller {
 	public static Result participantReport(String event) throws IOException {
 		Event eventy=Event.findBySlug(event);
 		String sql =
-		"select	 pfp.Event, pfp.Name as 'Participant Name', " +
-				"pfp.AccountOwner as 'Account Owner',pfp.Team,count(*) as'Number of Donation'," +
-				"sum(amount) as'Total amount Raised',avg(amount) as'Average amount Raised'," +
-				"cast(pfp.date_created as Char) as 'Page Create Date' from donation	join " +
-				"(select id,(select distinct name from event where id= event_id) as 'Event'," +
-				"name,date_created,(select distinct concat(first_name,' ',last_name)" +
-				" from users where id=user_admin_id) as 'AccountOwner'," +
-				"(select distinct name from team where id=team_id) as 'Team'" +
-				"from pfp where pfp_type=1 and event_id=:id) pfp where donation.pfp_id =pfp.id " +
-				"group by pfp.id ";
+				"select	 pfp.Event, pfp.Name as 'Participant Name', " +
+						"pfp.AccountOwner as 'Account Owner',pfp.Team,count(*) as'Number of Donation'," +
+						"sum(amount) as'Total amount Raised',avg(amount) as'Average amount Raised'," +
+						"cast(pfp.date_created as Char) as 'Page Create Date' from donation	join " +
+						"(select id,(select distinct name from event where id= event_id) as 'Event'," +
+						"name,date_created,(select distinct concat(first_name,' ',last_name)" +
+						" from users where id=user_admin_id) as 'AccountOwner'," +
+						"(select distinct name from team where id=team_id) as 'Team'" +
+						"from pfp where pfp_type=1 and event_id=:id) pfp where donation.pfp_id =pfp.id " +
+						"group by pfp.id ";
 		SqlQuery bug = Ebean.createSqlQuery(sql)
-				       .setParameter("id", eventy.id);
+				.setParameter("id", eventy.id);
 		List<SqlRow> list = bug.findList();
 
 		//List<Pfp> pfp = Pfp.findAll(event);// need to remove from pfp
@@ -497,11 +497,11 @@ public class ReportMgmt extends Controller {
 		Event eventy=Event.findBySlug(event);
 		String sql =
 				"select	pfp.Team,pfp.name as 'Participant Name' ,pfp.AccountOwner as 'Account Owner'," +
-				"amount as 'Donation Amount'," +
-				"first_name as 'Donor First Name',last_name as 'Donor Last Name',email as 'Donor Email'," +
-				"phone as 'Donor Phone',date_created as 'Date Created',date_paid as 'Date Paid'," +
-				"case payment_type when 1 then 'credit' when 2 then 'check' when 3 then 'cash' end as 'payment_type'," +
-				"transaction_number	from donation	join " +
+						"amount as 'Donation Amount'," +
+						"first_name as 'Donor First Name',last_name as 'Donor Last Name',email as 'Donor Email'," +
+						"phone as 'Donor Phone',date_created as 'Date Created',date_paid as 'Date Paid'," +
+						"case payment_type when 1 then 'credit' when 2 then 'check' when 3 then 'cash' end as 'payment_type'," +
+						"transaction_number	from donation	join " +
 						"(select id,name,(select distinct concat(first_name,' ',last_name)" +
 						"from users where id=user_admin_id) as 'AccountOwner'," +
 						"(select distinct name from team where id=team_id) as 'Team'" +
@@ -530,10 +530,10 @@ public class ReportMgmt extends Controller {
 
 		String sql =
 				"select CAST(a.date as date) as ' Date of Job ',CAST(a.start_time AS time) as 'START TIME'," +
-				"CAST(a.end_time AS time) as 'END TIME',a.name as 'Job Title',v.first_name as 'First Name'," +
-				"v.last_name as 'Last Name',v.email,v.phone,v.mobile,null as 'Check In ',null as 'Signature Box '" +
-				"from (select id,date,name,start_time,end_time from shift where " +
-				"volunteers_id=(select id from volunteers where eventid=:id)) a join volunteer v on v.shift_id=a.id";
+						"CAST(a.end_time AS time) as 'END TIME',a.name as 'Job Title',v.first_name as 'First Name'," +
+						"v.last_name as 'Last Name',v.email,v.phone,v.mobile,null as 'Check In ',null as 'Signature Box '" +
+						"from (select id,date,name,start_time,end_time from shift where " +
+						"volunteers_id=(select id from volunteers where eventid=:id)) a join volunteer v on v.shift_id=a.id";
 		SqlQuery bug = Ebean.createSqlQuery(sql)
 				.setParameter("id", eventy.id);
 		List<SqlRow> list = bug.findList();
@@ -557,8 +557,8 @@ public class ReportMgmt extends Controller {
 	public static Result sponsorReport(String event) throws IOException {
 		Event eventy=Event.findBySlug(event);
 		String sql =
-		"select donor_name sponsor, sum(amount) from donation where donation_type=3 and event_id=:id "+
-		"group by id,donor_name order by sum(amount)desc";
+				"select donor_name sponsor, sum(amount) from donation where donation_type=3 and event_id=:id "+
+						"group by id,donor_name order by sum(amount)desc";
 		SqlQuery bug = Ebean.createSqlQuery(sql)
 				.setParameter("id", eventy.id);
 		List<SqlRow> list = bug.findList();
@@ -594,12 +594,12 @@ public class ReportMgmt extends Controller {
 		Event eventy=Event.findBySlug(event);
 		String sql =
 				"select (select distinct name from team where id=al.team_id) as 'Team Name', " +
-				"al.name as 'Participant Name' ,al.total as 'Amount'," +
-				"team.teamtot as 'Team Total' from " +
-				"(select team_id,name ,total from pfp where pfp_type=1 and event_id=:id)al join " +
-				"(select team_id,sum(total) as teamtot from pfp where pfp_type=1 and event_id=:id" +
-				" group by team_id ) team " +
-				"on al.team_id=team.team_id";
+						"al.name as 'Participant Name' ,al.total as 'Amount'," +
+						"team.teamtot as 'Team Total' from " +
+						"(select team_id,name ,total from pfp where pfp_type=1 and event_id=:id)al join " +
+						"(select team_id,sum(total) as teamtot from pfp where pfp_type=1 and event_id=:id" +
+						" group by team_id ) team " +
+						"on al.team_id=team.team_id";
 		SqlQuery bug = Ebean.createSqlQuery(sql)
 				.setParameter("id", eventy.id);
 		List<SqlRow> list = bug.findList();
@@ -608,5 +608,5 @@ public class ReportMgmt extends Controller {
 
 
 	}
-	
+
 }

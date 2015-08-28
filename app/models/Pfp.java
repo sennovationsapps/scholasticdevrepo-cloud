@@ -79,9 +79,9 @@ public class Pfp extends Model implements PathBindable<Pfp>, Comparable {
 
 
 
-	@Constraints.Pattern(value = "^[0-9]{3}-[0-9]{3}-[0-9]{4}$",message = "The phone number cannot be longer than 12 digits including -")
+	@Constraints.Pattern(value = "[0-9.+]+",message = "The phone number cannot be longer than 12 digits including -")
 
-	@MaxLength(value = 12)
+	@MaxLength(value = 10)
 	public String emergencyContactPhone;
 
 	@ManyToOne(optional = false)
@@ -344,11 +344,57 @@ public class Pfp extends Model implements PathBindable<Pfp>, Comparable {
 						query.eq("userAdmin.id", localUser.id);
 					}														
 				}
+		System.out.println("----names--- "+query.select("id, name, pfpType")
+				.fetch("userAdmin").fetch("event").fetch("team")
+				.orderBy(sortBy + " " + order).findPagingList(pageSize)
+				.setFetchAhead(false).getPage(page));
 				return query.select("id, name, goal, event.id, event.name, pfpType, team.id, team.name, userAdmin")
 				.fetch("userAdmin").fetch("event").fetch("team")
 				.orderBy(sortBy + " " + order).findPagingList(pageSize)
 				.setFetchAhead(false).getPage(page);
 			}
+
+
+	//====================pfp search for particular event============28.08.2015=======================start=======================//
+
+	public static Page<Pfp> pageForParticularEvent(int page, int pageSize, String sortBy,
+								 String order, String filter, String fieldName, User localUser, Long eventId) {
+		String queryField = "name";
+		if (StringUtils.equals("name", fieldName)
+				|| StringUtils.equals("name", fieldName)) {
+			queryField = fieldName;
+		} else if (StringUtils.equals("teamName", fieldName) ) {
+			queryField = "team.name";
+		} else if (StringUtils.equals("eventName", fieldName) ) {
+			queryField = "event.name";
+		} else if (StringUtils.equals("userAdmin", fieldName) ) {
+			queryField = "userAdmin.email";
+		}
+		if (pageSize > 20) {
+			pageSize = 20;
+		}
+		System.out.println("filter :: "+"%" + filter + "%");
+		ExpressionList<Pfp> query = find.where().ilike(queryField, "%" + filter + "%").eq("event.id",eventId);
+		if(localUser != null) {
+			if(localUser.isEventAdmin()) {
+				query.eq("event.userAdmin.id", localUser.id);
+			} else {
+				query.eq("userAdmin.id", localUser.id);
+			}
+		}
+		System.out.println("----names--- "+query.select("id, name, pfpType")
+				.fetch("userAdmin").fetch("event").fetch("team")
+				.orderBy(sortBy + " " + order).findPagingList(pageSize)
+				.setFetchAhead(false).getPage(page));
+		return query.select("id, name, goal, event.id, event.name, pfpType, team.id, team.name, userAdmin")
+				.fetch("userAdmin").fetch("event").fetch("team")
+				.orderBy(sortBy + " " + order).findPagingList(pageSize)
+				.setFetchAhead(false).getPage(page);
+	}
+
+	//====================pfp search for particular event============28.08.2015=======================end=======================//
+
+
 	
 	public static List<Pfp> findAllByEventIdAndOptions(Long id, Map<String, String> options) {
 		final ExpressionList<Pfp> pfps = find.where()

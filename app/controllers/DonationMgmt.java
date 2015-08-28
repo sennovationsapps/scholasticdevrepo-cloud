@@ -676,6 +676,67 @@ public class DonationMgmt extends Controller {
 		donation.sponsorItem = sponsorItem;
 		donation.phone = ControllerUtil.stripPhone(donation.phone);
 		donation.event = event;
+
+
+
+
+
+		/**************upload image*******************20.08.2015****************start*****************/
+
+		final Http.MultipartFormData body = request().body()
+				.asMultipartFormData();
+		System.out.println("body :: "+body);
+		final Http.MultipartFormData.FilePart imgUrlFilePart = body
+				.getFile("imgUrl");
+		System.out.println("imgUrlFilePart :: "+imgUrlFilePart);
+
+		System.out.println("in saveModalWithSponsorrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr");
+
+
+		S3File imgUrlFile = null;
+		if (imgUrlFilePart != null) {
+			System.out.println("imgUrlFile is not null");
+			if (!ControllerUtil.isImage(imgUrlFilePart.getFilename())) {
+				donationForm.reject("imgUrl", ControllerUtil.IMAGE_ERROR_MSG);
+			} else if (ControllerUtil.isFileTooLarge(imgUrlFilePart.getFile())) {
+				donationForm.reject("imgUrl", ControllerUtil.IMAGE_SIZE_ERROR_MSG);
+			} else {
+				imgUrlFile = new S3File();
+				imgUrlFile.name = ControllerUtil.decodeFileName(imgUrlFilePart
+						.getFilename());
+				imgUrlFile.file = imgUrlFilePart.getFile();
+				System.out.println("imgUrlFile.file =>"+imgUrlFile.file );
+				donationForm.get().imgUrl = imgUrlFile.getUrl();
+				System.out.println("donationForm.get().imgUrl =>"+donationForm.get().imgUrl );
+			}
+		}
+		if (imgUrlFile != null) {
+			System.out.println("imgUrlFile save");
+
+   /*if(event.imgUrl != null) {
+      S3File.delete(event.imgUrl);
+   }*/
+			imgUrlFile.save();
+			System.out.println("imgUrlFile save end");
+		}
+
+/**************upload image*******************20.08.2015****************end****************/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 		donation.save();
 		Logger.info("Successfully submitted transaction to Virtual Merchant for CCNum [{}] and Transaction ID [{}] in the amount of [{}]",
 						donation.ccDigits, donation.transactionNumber, donation.amount);

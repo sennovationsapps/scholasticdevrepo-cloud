@@ -53,6 +53,6 @@ public class Organization extends Model {
 
 	public static ExpressionList<Organization> findByName(String name)
 	{
-		return find.where().like("LCASE(NAME)", "%"+name.toLowerCase()+"%");
+		return find.where().like("LCASE(NAME)", name.toLowerCase()+"%");
 	}
 }

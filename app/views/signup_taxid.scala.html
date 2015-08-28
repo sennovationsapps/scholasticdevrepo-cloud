@@ -34,23 +34,97 @@
                     @form(routes.TaxidSignup.doSignup) {
                         <b>Organization Information (<span style="font-size: 75%;color: #737373">All Fields Required</span>)</b>
                         <hr/>
+                        <div>
+                           <b>Organization Tax ID Number</b>
+                            <br />
+                        </div>
+
                         @_taxidPartial(signupForm)
+                      @*  @helper.inputText(signupForm("orgTaxIdNo"), '_label -> "Organization Tax ID Number", 'class -> "form-control", '_addon -> "glyphicon-home", 'placeholder -> "Enter only the 9 digit Tax ID number, no symbols or characters")*@
+
+
+
                         @helper.inputText(signupForm("orgName"), '_label -> "Enter Name", 'class -> "form-control", '_addon -> "glyphicon-user", 'placeholder -> "Org Name")
                         @helper.inputText(signupForm("orgAddress"), '_label -> "Enter Address", 'class -> "form-control", '_addon -> "glyphicon-user", 'placeholder -> "Org Address")
                         @helper.inputText(signupForm("orgCity"), '_label -> "Enter City", 'class -> "form-control", '_addon -> "glyphicon-home", 'placeholder -> "Org City")
-                        @select(signupForm("orgState"), options(ControllerUtil.STATE_MAP), '_label -> "Enter State", 'class -> "form-control", '_addon -> "glyphicon-home", 'placeholder -> "Org State")
-                        @helper.inputText(signupForm("orgZip"), '_label -> "Enter Zip", 'class -> "form-control", '_addon -> "glyphicon-home", 'placeholder -> "Org Zip (55555 or 55555-4444)", 'title -> "5 or 9 digits with dash (11111-1111)")
+                        @select(signupForm("orgState"), options(ControllerUtil.STATE_MAP), '_showConstraints -> false,'_label -> "Enter State(Required)", 'class -> "form-control", '_addon -> "glyphicon-home", 'placeholder -> "Org State")
+                        @helper.inputText(signupForm("orgZip"), '_showConstraints -> false, '_label -> "Enter Zip(Required)", 'class -> "form-control", '_addon -> "glyphicon-home", 'placeholder -> "Org Zip (55555 or 55555-4444)", 'title -> "5 or 9 digits with dash (11111-1111)")
+
+
+                        @******phno format*************24.08.2015***************start*****@
+                        <div style="display:none;">
                         @helper.inputText(signupForm("orgPhone"), '_label -> "Enter Phone Number", 'id -> "orgPhNo",'class -> "form-control", '_addon -> "glyphicon-earphone", 'placeholder -> "Org Phone")
+
+                        </div>
+                        <div><b>Enter Phone Number</b></div>
+
+
+
+
+
+                        <div>
+                            <table>
+                                <tr>
+                                    <td>
+                                    @helper.inputText(signupForm("orgPhPart1"), '_label -> "nolabel",'_type -> "hidden",'onkeyup -> "autoFormAdvance(3,'areaCode1','phonePre1')",'maxlength -> "3", 'size -> "3", 'id -> "areaCode1", 'class -> "form-control", '_addon -> "glyphicon-earphone", 'title -> "please fill Enter Phone Number field.10 digits and numeric only  and the format will be like example(ex.123-345-5678)")
+
+                                    </td>
+                                    <td> - </td>
+                                    <td>
+                                    @helper.inputText(signupForm("orgPhPart2"), '_label -> "nolabel",'_type -> "hidden",'onkeyup -> "autoFormAdvance(3,'phonePre1','phoneSuf1')",'maxlength -> "3", 'size -> "3", 'id -> "phonePre1", 'class -> "form-control",   'title -> "please fill Enter Phone Number field.10 digits and numeric only  and the format will be like example(ex.123-345-5678)")
+                                    </td>
+                                    <td> - </td>
+                                    <td>
+                                    @helper.inputText(signupForm("orgPhPart3"), '_label -> "nolabel",'_type -> "hidden",'onchange -> "mergeTotalPhNo1()",'maxlength -> "4", 'size -> "4", 'id -> "phoneSuf1", 'class -> "form-control", 'title -> "please fill Enter Phone Number field.10 digits and numeric only  and the format will be like example(ex.123-345-5678)")
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+
+                        @******phno format*************24.08.2015***************end*****@
+                        <br /><br /><br /><br />
                         <b>Event Manager Information (<span style="font-size: 75%;color: #737373">All Fields Required</span>)</b>
                         <hr/>
                         @helper.inputText(signupForm("firstName"), '_label -> "Enter First Name", 'class -> "form-control", '_addon -> "glyphicon-user", 'placeholder -> "First Name")
                         @helper.inputText(signupForm("lastName"), '_label -> "Enter Last Name", 'class -> "form-control", '_addon -> "glyphicon-user", 'placeholder -> "Last Name")
+                        @******phno format*************24.08.2015***************start*****@
+
+                        <div style="display:none;">
                         @helper.inputText(signupForm("phone"), '_label -> "Enter Phone Number", 'id -> "phNo", 'class -> "form-control", '_addon -> "glyphicon-earphone", 'placeholder -> "Phone (ex.123-345-5678) ,just put numbers special character will be automatically appeded", 'title -> "10 digits and numeric only  and the format will be like example(ex.123-345-5678)")
-                        @helper.inputText(signupForm("zip"), '_label -> "Enter Zip Code", 'class -> "form-control", '_addon -> "glyphicon-home", 'placeholder -> "Zip Code (55555 or 55555-4444)", 'title -> "5 or 9 digits with dash (11111-1111)")
+
+                        </div>
+                        <div><b>Enter Phone Number</b></div>
+
+
+
+
+
+                        <div>
+                            <table>
+                                <tr>
+                                    <td>
+                                    @helper.inputText(signupForm("phPart1"), '_label -> "nolabel",'_type -> "hidden",'onkeyup -> "autoFormAdvance(3,'areaCode','phonePre')",'maxlength -> "3", 'size -> "3", 'id -> "areaCode", 'class -> "form-control", '_addon -> "glyphicon-earphone",'title -> "please fill Enter Phone Number field.10 digits and numeric only  and the format will be like example(ex.123-345-5678)")
+
+                                    </td>
+                                    <td> - </td>
+                                    <td>
+                                    @helper.inputText(signupForm("phPart2"), '_label -> "nolabel",'_type -> "hidden",'onkeyup -> "autoFormAdvance(3,'phonePre','phoneSuf')",'maxlength -> "3", 'size -> "3", 'id -> "phonePre", 'class -> "form-control",  'title -> "please fill Enter Phone Number field.10 digits and numeric only  and the format will be like example(ex.123-345-5678)")
+                                    </td>
+                                    <td> - </td>
+                                    <td>
+                                    @helper.inputText(signupForm("phPart3"), '_label -> "nolabel",'_type -> "hidden",'onchange -> "mergeTotalPhNo()",'maxlength -> "4", 'size -> "4", 'id -> "phoneSuf", 'class -> "form-control", 'title -> "please fill Enter Phone Number field.10 digits and numeric only  and the format will be like example(ex.123-345-5678)")
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+
+                        @******phno format*************24.08.2015***************end******@
+                        @helper.inputText(signupForm("zip"),'_showConstraints -> false, '_label -> "Enter Zip Code", 'class -> "form-control", '_addon -> "glyphicon-home", 'placeholder -> "Zip Code (55555 or 55555-4444)", 'title -> "5 or 9 digits with dash (11111-1111)")
                         @helper.inputText(signupForm("email"), '_label -> "Email (a valid email is requred)", 'class -> "form-control", '_addon -> "@",  'placeholder -> "Enter email")
                         @_passwordPartial(signupForm)
-                        @helper.checkbox(signupForm("agreeToPolicy"), '_label -> Html(Messages("accept.terms")), '_labelSide -> "right")
+                       @helper.checkbox(signupForm("agreeToPolicy"), '_label -> Html(Messages("accept.terms")), '_labelSide -> "right")
 
+                      @*  <input id="agreeToPolicy" name="agreeToPolicy" value="" type="checkbox"> *@
                         <input name="mobile" id="mobile" style="display: none"/>
                         <input name="mail" id="mail" style="display: none"/>
                         <button type="submit" class="btn btn-green" id="submitSignUp" disabled="disabled">@Messages("playauthenticate.signup.now")</button>
@@ -69,240 +143,117 @@
 	});
   </script>
 
+    <script>
+        //============================phno partition validation ====================================24.08.2015==========start========================================//
+$(document).ready(function(){
+//===========chekbox refresh=================25.08.2015===============start=================================//
+if($('#agreeToPolicy').is(':checked')) {
+document.getElementById("agreeToPolicy").checked = false;
+//$('#agreeToPolicy').prop('checked', "unchecked");
+}
+
+//===========chekbox refresh=================25.08.2015===============end=================================//
+/*$("#phNo").hide();*/
+var phNoValue = $("#phNo").val();
+var phNoValuePart1;
+var phNoValuePart2;
+var phNoValuePart3;
+
+if(phNoValue!= null){
+phNoValuePart1  = phNoValue.substring(0,3);
+$("#areaCode").val(phNoValuePart1);
+phNoValuePart2 = phNoValue.substring(3,6);
+$("#phonePre").val(phNoValuePart2);
+phNoValuePart3 = phNoValue.substring(6,10);
+$("#phoneSuf").val(phNoValuePart3);
+}
+
+
+var orgphNoValue = $("#orgPhNo").val();
+/*var phNoValuePart1;
+var phNoValuePart2;
+var phNoValuePart3;*/
+
+if(orgphNoValue!= null){
+phNoValuePart1  = orgphNoValue.substring(0,3);
+$("#areaCode1").val(phNoValuePart1);
+phNoValuePart2 = orgphNoValue.substring(3,6);
+$("#phonePre1").val(phNoValuePart2);
+phNoValuePart3 = orgphNoValue.substring(6,10);
+$("#phoneSuf1").val(phNoValuePart3);
+}
+});
+
+function autoFormAdvance(afterNumChars,currentFormId,nextFormId) {
+/*if(currentFormId.equals("phoneSuf")){
+$("#phoneSuf").onkeyup();
+}*/
+
+
+	if(document.getElementById(currentFormId).value.length==afterNumChars) {
+		document.getElementById(nextFormId).focus();
+	}
+
+
+}
+
+function mergeTotalPhNo(){
+//alert("within keyup");
+var totalPhValue;
+var length = $("#phoneSuf").val().length;
+
+if(length == 4){
+totalPhValue = $("#areaCode").val()+$("#phonePre").val()+$("#phoneSuf").val();
+$("#phNo").val(totalPhValue);
+//alert($("#phNo").val());
+}
+
+//alert("totalPhValue :: "+totalPhValue);
+
+
+}
+
+        //============================phno partition validation ====================================24.08.2015==========end========================================//
+    </script>
 
     <script>
+        //============================phno partition validation ====================================24.08.2015==========start========================================//
 
-//=========new add
+
+/*
+function autoFormAdvance(afterNumChars,currentFormId,nextFormId) {
+/!*if(currentFormId.equals("phoneSuf")){
+$("#phoneSuf").onkeyup();
+}*!/
 
 
-   $( "#phNo" ).keyup(function(){
-   //alert("on keyup")
+	if(document.getElementById(currentFormId).value.length==afterNumChars) {
+		document.getElementById(nextFormId).focus();
+	}
 
-   var phNo1;
-   //var lastChar;
-   var phNo = document.getElementById("phNo").value;
-   //alert("phNo "+phNo)
-   //previousLength = phNo.length;
-   //alert("phNo "+phNo)
-   currentLength = phNo.length;
-   //alert("currentLength :: "+currentLength);
-   //alert("previousLength :: "+previousLength);
-var length;
-
-if(currentLength == 4 || currentLength == 8){
-//alert("if(currentLength == 4 || currentLength == 8)");
-var lastChar = phNo.charAt(currentLength-1);
-//alert("lastChar "+lastChar);
-if(lastChar!= '-'){
-phNo = phNo.substring(0,currentLength-1);
-phNo =phNo.concat("-");
-phNo = phNo.concat(lastChar);
 
 }
-//phPart1 = phNo;
-previousLength = phNo.length;
- $('#phNo').val(phNo);
+*/
 
+function mergeTotalPhNo1(){
+//alert("within keyup");
+var totalPhValue;
+var length = $("#phoneSuf1").val().length;
+
+if(length == 4){
+totalPhValue = $("#areaCode1").val()+$("#phonePre1").val()+$("#phoneSuf1").val();
+$("#orgPhNo").val(totalPhValue);
+//alert($("#phNo").val());
 }
 
+//alert("totalPhValue :: "+totalPhValue);
 
-
-
-else{
-
-   if(currentLength<previousLength){
-//alert("currentLength<previousLength");
-   previousLength = currentLength;
-   if(currentLength> 0){
-   //alert("currentLength ::"+currentLength);
-//alert("phNo "+phNo);
-var lastChar = phNo.charAt(currentLength-1);
-
-//alert("lastChar"+lastChar);
-if(lastChar == '-'){
-phNo = phNo.substring(0,currentLength-1);
-}
-else{
-phNo = phNo.substring(0,currentLength);
-}
-   //alert("if return");
-//phNo = phNo.substring(0,currentLength);
-     $('#phNo').val(phNo);
-
-   }
-
-   phPart1 = null;
-   }
-
-
-else{
-   //alert("else");
-
-      if( phNo.length <8){
-      previousLength = phNo.length;
-      if(phNo.contains("-")){
-     // alert("phNo.contains("-")")
-      length = phNo.length;
-     // alert("length1 "+length)
-        phNo = phNo.substring(phNo.indexOf("-")+1,length);
-        //alert("phNo "+phNo);
-
-      }
-      length = phNo.length;
-
-    //alert("length11 "+length)
-      if(length == 3){
-     // alert("length == 3"+phNo.concat("-"));
-      if(phPart1!=null){
-      phNo1 = phNo.concat("-");
-      //alert("phNo1 :: "+phNo1);
-     // alert("before phPart1 :: "+phPart1);
-      phPart1 = phPart1.concat(phNo1);
-      previousLength = phPart1.length;
-      //alert("after phPart1 :: "+phPart1)
-         $('#phNo').val(phPart1);
-      }else{
-      phNo = document.getElementById("phNo").value;
-      // alert("before phPart1 :: "+phPart1);
-      phPart1 = phNo.concat("-");
-      previousLength = phPart1.length;
-      //alert("previousLength ")
-      //alert("phPart1 :: "+phPart1)
-         $('#phNo').val(phPart1);
-      }
-
-
-   // document.getElementById("phNo").innerHTML = phNo.concat("-");
-       // alert("final :: "+document.getElementById("phNo").value);
-      }
-      }else{
-      previousLength = phNo.length;
-      }
- //aler("previousLength :: "+previousLength);
-      }
-      }
-
-
-   });
-
-
-
-  </script>
-    <script>
-
-//=========new add
-
-
-   $( "#orgPhNo" ).keyup(function(){
-   //alert("on keyup")
-
-   var phNo1;
-   //var lastChar;
-   var phNo = document.getElementById("orgPhNo").value;
-   //alert("phNo "+phNo)
-   //previousLength = phNo.length;
-   //alert("phNo "+phNo)
-   currentLength = phNo.length;
-   //alert("currentLength :: "+currentLength);
-   //alert("previousLength :: "+previousLength);
-var length;
-
-if(currentLength == 4 || currentLength == 8){
-//alert("if(currentLength == 4 || currentLength == 8)");
-var lastChar = phNo.charAt(currentLength-1);
-//alert("lastChar "+lastChar);
-if(lastChar!= '-'){
-phNo = phNo.substring(0,currentLength-1);
-phNo =phNo.concat("-");
-phNo = phNo.concat(lastChar);
-
-}
-//phPart1 = phNo;
-previousLength = phNo.length;
- $('#orgPhNo').val(phNo);
 
 }
 
+        //============================phno partition validation ====================================24.08.2015==========end========================================//
+    </script>
 
-
-
-else{
-
-   if(currentLength<previousLength){
-//alert("currentLength<previousLength");
-   previousLength = currentLength;
-   if(currentLength> 0){
-   //alert("currentLength ::"+currentLength);
-//alert("phNo "+phNo);
-var lastChar = phNo.charAt(currentLength-1);
-
-//alert("lastChar"+lastChar);
-if(lastChar == '-'){
-phNo = phNo.substring(0,currentLength-1);
-}
-else{
-phNo = phNo.substring(0,currentLength);
-}
-   //alert("if return");
-//phNo = phNo.substring(0,currentLength);
-     $('#orgPhNo').val(phNo);
-
-   }
-
-   phPart1 = null;
-   }
-
-
-else{
-   //alert("else");
-
-      if( phNo.length <8){
-      previousLength = phNo.length;
-      if(phNo.contains("-")){
-     // alert("phNo.contains("-")")
-      length = phNo.length;
-     // alert("length1 "+length)
-        phNo = phNo.substring(phNo.indexOf("-")+1,length);
-        //alert("phNo "+phNo);
-
-      }
-      length = phNo.length;
-
-    //alert("length11 "+length)
-      if(length == 3){
-     // alert("length == 3"+phNo.concat("-"));
-      if(phPart1!=null){
-      phNo1 = phNo.concat("-");
-      //alert("phNo1 :: "+phNo1);
-     // alert("before phPart1 :: "+phPart1);
-      phPart1 = phPart1.concat(phNo1);
-      previousLength = phPart1.length;
-      //alert("after phPart1 :: "+phPart1)
-         $('#orgPhNo').val(phPart1);
-      }else{
-      phNo = document.getElementById("orgPhNo").value;
-      // alert("before phPart1 :: "+phPart1);
-      phPart1 = phNo.concat("-");
-      previousLength = phPart1.length;
-      //alert("previousLength ")
-      //alert("phPart1 :: "+phPart1)
-         $('#orgPhNo').val(phPart1);
-      }
-
-
-   // document.getElementById("phNo").innerHTML = phNo.concat("-");
-       // alert("final :: "+document.getElementById("phNo").value);
-      }
-      }else{
-      previousLength = phNo.length;
-      }
- //aler("previousLength :: "+previousLength);
-      }
-      }
-
-
-   });
-  </script>
 
 
 

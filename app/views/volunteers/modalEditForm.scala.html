@@ -25,10 +25,104 @@
 
 
 
+
+    @******phno format*************24.08.2015***************start*****@
+
+    <div style="display:none;">
     @inputText(volunteerForm("phone"), '_label -> "nolabel", 'id -> "phNo", 'class -> "form-control", '_addon -> "glyphicon-earphone", 'placeholder -> "Phone: 555-555-1212 (only numbers)", 'title -> "10 digits and numeric only  and the format will be like example(ex.123-345-5678)")
 
+    </div>
 
+
+
+
+
+
+
+    @*<div>
+    <b>Emergency Contact Phone Number(Optional)</b>
+    </div>
+    *@
+    <div>
+        <table>
+            <tr>
+                <td>
+                    <div class="input-group">
+                        <span class="input-group-addon">
+
+                            <span class="glyphicon-earphone" style="vertical-align:middle"/>
+                        </span>
+
+
+                        <input type="text" addon="glyphicon-earphone" onkeyup="autoFormAdvance(3,'areaCode','phonePre')" id="areaCode" maxlength="3" size="3"/>
+                    </div>
+                </td>
+                <td> - </td>
+                <td><input type="text" onkeyup="autoFormAdvance(3,'phonePre','phoneSuf')" id="phonePre" maxlength="3" size="3" /></td>
+                <td> - </td>
+                <td> <input type="text" id="phoneSuf" onkeyup="mergeTotalPhNo()"  maxlength="4" size="4"/></td>
+            </tr>
+        </table>
+    </div>
+    <div>
+        (Enter Phone No)
+    </div>
+    <br />
+    @******phno format*************24.08.2015***************end*****@
+
+
+  @*  @inputText(volunteerForm("phone"), '_label -> "nolabel", 'id -> "phNo", 'class -> "form-control", '_addon -> "glyphicon-earphone", 'placeholder -> "Phone: 555-555-1212 (only numbers)", 'title -> "10 digits and numeric only  and the format will be like example(ex.123-345-5678)")*@
+
+
+
+    @******phno format*************24.08.2015***************start*****@
+
+    <div style="display:none;">
     @inputText(volunteerForm("mobile"), '_addon -> "glyphicon-earphone",'id -> "mobileNo", '_label -> "nolabel", 'placeholder -> "Mobile: 555-555-1212 (only numbers)", 'class -> "form-control", 'title -> "10 digits (numeric only)")
+
+    </div>
+
+
+
+
+
+    @*<div>
+    <b>Emergency Contact Phone Number(Optional)</b>
+    </div>*@
+
+    <div>
+
+
+        <table>
+            <tr>
+                <td>
+                    <div class="input-group">
+                        <span class="input-group-addon">
+
+                            <span class="glyphicon-earphone" style="vertical-align:middle"/>
+                        </span>
+                        <input type="text"  addon="glyphicon-earphone" onkeyup="autoFormAdvance(3,'areaCode1','phonePre1')" id="areaCode1" maxlength="3" size="3"/>
+                    </div>
+                </td>
+                <td> - </td>
+                <td><input type="text" onkeyup="autoFormAdvance(3,'phonePre1','phoneSuf1')" id="phonePre1" maxlength="3" size="3" /></td>
+                <td> - </td>
+                <td> <input type="text" id="phoneSuf1" onkeyup="mergeTotalPhNo1()"  maxlength="4" size="4"/></td>
+            </tr>
+        </table>
+    </div>
+    <div>
+        (Enter mobile No)
+    </div>
+    <br />
+
+    @******phno format*************24.08.2015***************end*****@
+
+
+
+
+
+    @* @inputText(volunteerForm("mobile"), '_addon -> "glyphicon-earphone",'id -> "mobileNo", '_label -> "nolabel", 'placeholder -> "Mobile: 555-555-1212 (only numbers)", 'class -> "form-control", 'title -> "10 digits (numeric only)")*@
 
 
 
@@ -277,4 +371,153 @@ else{
   </script>
 
 
+
+
+    <script>
+        //============================phno partition validation ====================================24.08.2015==========start========================================//
+$(document).ready(function(){
+/*$("#phNo").hide();*/
+var phNoValue = $("#phNo").val();
+var phNoValuePart1;
+var phNoValuePart2;
+var phNoValuePart3;
+
+if(phNoValue!= null){
+phNoValuePart1  = phNoValue.substring(0,3);
+$("#areaCode").val(phNoValuePart1);
+phNoValuePart2 = phNoValue.substring(3,6);
+$("#phonePre").val(phNoValuePart2);
+phNoValuePart3 = phNoValue.substring(6,10);
+$("#phoneSuf").val(phNoValuePart3);
+}
+
+
+var orgphNoValue = $("#mobileNo").val();
+/*var phNoValuePart1;
+var phNoValuePart2;
+var phNoValuePart3;*/
+
+if(orgphNoValue!= null){
+phNoValuePart1  = orgphNoValue.substring(0,3);
+$("#areaCode1").val(phNoValuePart1);
+phNoValuePart2 = orgphNoValue.substring(3,6);
+$("#phonePre1").val(phNoValuePart2);
+phNoValuePart3 = orgphNoValue.substring(6,10);
+$("#phoneSuf1").val(phNoValuePart3);
+}
+});
+
+function autoFormAdvance(afterNumChars,currentFormId,nextFormId) {
+/*if(currentFormId.equals("phoneSuf")){
+$("#phoneSuf").onkeyup();
+}*/
+
+patternMatchForPhone(currentFormId);
+
+	if(document.getElementById(currentFormId).value.length==afterNumChars) {
+		document.getElementById(nextFormId).focus();
+	}
+mergeTotalPhNo();
+mergeTotalPhNo1();
+
+}
+
+function mergeTotalPhNo(){
+//alert("within keyup");
+
+patternMatchForPhone('phoneSuf');
+
+
+
+var totalPhValue;
+var length1 = $("#areaCode").val().length;
+var length2 = $("#phonePre").val().length;
+var length3 = $("#phoneSuf").val().length;
+
+if(length1==3 && length2 ==3 &&length3 == 4){
+totalPhValue = $("#areaCode").val()+$("#phonePre").val()+$("#phoneSuf").val();
+$("#phNo").val(totalPhValue);
+//alert($("#phNo").val());
+}
+
+//alert("totalPhValue :: "+totalPhValue);
+
+
+}
+
+        //============================phno partition validation ====================================24.08.2015==========end========================================//
+    </script>
+
+    <script>
+
+
+        //============================phno partition validation ====================================24.08.2015==========start========================================//
+
+
+/*
+function autoFormAdvance(afterNumChars,currentFormId,nextFormId) {
+/!*if(currentFormId.equals("phoneSuf")){
+$("#phoneSuf").onkeyup();
+}*!/
+
+
+	if(document.getElementById(currentFormId).value.length==afterNumChars) {
+		document.getElementById(nextFormId).focus();
+	}
+
+
+}
+*/
+
+function mergeTotalPhNo1(){
+//alert("within keyup");
+patternMatchForPhone('phoneSuf1');
+var totalPhValue;
+var length1 = $("#areaCode1").val().length;
+var length2 = $("#phonePre1").val().length;
+var length3 = $("#phoneSuf1").val().length;
+
+
+
+
+
+
+if(length1==3 && length2 ==3 &&length3 == 4){
+totalPhValue = $("#areaCode1").val()+$("#phonePre1").val()+$("#phoneSuf1").val();
+$("#mobileNo").val(totalPhValue);
+//alert($("#phNo").val());
+}
+
+//alert("totalPhValue :: "+totalPhValue);
+
+
+}
+
+        //============================phno partition validation ====================================24.08.2015==========end========================================//
+    </script>
+
+
+<script>
+    function patternMatchForPhone(id){
+
+    var phPattern = /^([0-9])+$/;
+    var phValue =document.getElementById(id).value;
+    //alert(phValue );
+    //alert(phValue.match(phPattern));
+    if(phValue.match(phPattern)==null){
+    //alert("before "+phValue);
+     phValue = phValue.substring(0,phValue.length-1);
+    // alert("after "+phValue);
+     }
+     id = "#"+id;
+     // alert("id :: "+id);
+     $(id).val(phValue);
+
+     //alert(" $(id).val"+ $(id).val);
+    //alert(ph)
+
+     //document.getElementById(id).HTML(phValue);
+
+    }
+</script>
 

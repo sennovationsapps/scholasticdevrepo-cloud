@@ -37,9 +37,42 @@
             @helper.inputText(pfpForm("name"), '_label -> "Pfp Name", 'class -> "form-control", 'placeholder -> "Name", 'placeholder -> "Name (i.e., Jason T., Thomspon Family, Jason Thompson)", '_info -> "helpPfpName")
         @helper.inputText(pfpForm("goal"), '_label -> "Fundraising Goal", 'class -> "form-control", '_addon -> "$", 'placeholder -> "250", '_info -> "helpGoal")
         @helper.inputText(pfpForm("title"), '_label -> "Page Title", 'class -> "form-control")
+
+
+
+
+
         @helper.inputText(pfpForm("emergencyContact"), '_label -> "Emergency Contact", 'class -> "form-control", '_addon -> "glyphicon-user", 'placeholder -> "Name")
 
-        @helper.inputText(pfpForm("emergencyContactPhone"), '_label -> "Emergency Contact Phone Number(Optional)", 'id -> "phNo", 'class -> "form-control", '_addon -> "glyphicon-earphone", 'placeholder -> "555-555-1212 (only numbers)", 'title -> "10 digits and numeric only  ")
+
+       <div style="display:none">
+       @helper.inputText(pfpForm("emergencyContactPhone"), '_label -> "Emergency Contact Phone Number(Optional)", 'id -> "phNo", 'class -> "form-control", '_addon -> "glyphicon-earphone", 'placeholder -> "555-555-1212 (only numbers)", 'title -> "10 digits and numeric only  ")
+
+
+       </div>
+
+
+        @******phno format*************24.08.2015***************end*****@
+         <div>
+            <b>Emergency Contact Phone Number(Optional)</b>
+         </div>
+
+          <div>
+        <table>
+        <tr>
+        <td><input type="text" onkeyup="autoFormAdvance(3,'areaCode','phonePre')" id="areaCode" maxlength="3" size="3"/></td>
+        <td> - </td>
+        <td><input type="text" onkeyup="autoFormAdvance(3,'phonePre','phoneSuf')" id="phonePre" maxlength="3" size="3" /></td>
+        <td> - </td>
+        <td> <input type="text" id="phoneSuf" onkeyup="mergeTotalPhNo()"  maxlength="4" size="4"/></td>
+        </tr>
+        </table>
+        </div>
+
+
+
+
+
 
           @*  @text(pfpForm("emergencyContactPhone"), '_label -> "Emergency Contact Phone Number", 'class -> "form-control", '_addon -> "glyphicon-earphone", 'placeholder -> "555-555-1212 (only numbers)", 'title -> "10 digits (numeric only)")*@
             @helper.inputFile(pfpForm("imgUrl"), '_label -> "Add a smaller image next to your fundraising message (Optional)", 'class -> "form-control", '_info -> "helpImgUrl")
@@ -257,5 +290,92 @@ else{
 
 
    });
+
+
+
   </script>
+
+
+    <script>
+        //============================phno partition validation ====================================24.08.2015==========start========================================//
+$(document).ready(function(){
+/*$("#phNo").hide();*/
+var phNoValue = $("#phNo").val();
+//alert("phNoValue :: "+phNoValue);
+var phNoValuePart1;
+var phNoValuePart2;
+var phNoValuePart3;
+
+if(phNoValue!= null){
+phNoValuePart1  = phNoValue.substring(0,3);
+$("#areaCode").val(phNoValuePart1);
+phNoValuePart2 = phNoValue.substring(3,6);
+$("#phonePre").val(phNoValuePart2);
+phNoValuePart3 = phNoValue.substring(6,10);
+$("#phoneSuf").val(phNoValuePart3);
+}
+});
+
+function autoFormAdvance(afterNumChars,currentFormId,nextFormId) {
+/*if(currentFormId.equals("phoneSuf")){
+$("#phoneSuf").onkeyup();
+}*/
+patternMatchForPhone(currentFormId);
+
+	if(document.getElementById(currentFormId).value.length==afterNumChars) {
+		document.getElementById(nextFormId).focus();
+	}
+
+mergeTotalPhNo();
+}
+
+function mergeTotalPhNo(){
+//alert("within keyup");
+patternMatchForPhone('phoneSuf');
+var totalPhValue;
+var length1 = $("#areaCode").val().length;
+var length2 = $("#phonePre").val().length;
+var length3 = $("#phoneSuf").val().length;
+
+if(length1==3 && length2 ==3 &&length3 == 4){
+totalPhValue = $("#areaCode").val()+$("#phonePre").val()+$("#phoneSuf").val();
+$("#phNo").val(totalPhValue);
+//alert($("#phNo").val());
+}
+
+//alert("totalPhValue :: "+totalPhValue);
+
+
+}
+
+        //============================phno partition validation ====================================24.08.2015==========end========================================//
+    </script>
+
+
+    <script>
+    function patternMatchForPhone(id){
+
+    var phPattern = /^([0-9])+$/;
+    var phValue =document.getElementById(id).value;
+    //alert(phValue );
+    //alert(phValue.match(phPattern));
+    if(phValue.match(phPattern)==null){
+    //alert("before "+phValue);
+     phValue = phValue.substring(0,phValue.length-1);
+    // alert("after "+phValue);
+     }
+     id = "#"+id;
+     // alert("id :: "+id);
+     $(id).val(phValue);
+
+     //alert(" $(id).val"+ $(id).val);
+    //alert(ph)
+
+     //document.getElementById(id).HTML(phValue);
+
+    }
+</script>
+
+
+
 }

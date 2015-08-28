@@ -127,9 +127,9 @@
 				a = document.createElement("a");
 				a.download = getFileName(e.settings);
 				a.href = link;
-                                document.body.appendChild(a); //new line added
+                                document.body.appendChild(a); // fixes for firefox browser
 				a.click();
-                                document.body.removeChild(a); //new line added
+                                document.body.removeChild(a); //fixes for firefox browser
 	        }
 			
 			return true;

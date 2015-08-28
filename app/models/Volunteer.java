@@ -45,10 +45,12 @@ public class Volunteer extends Model {
 	public String lastName;
 
 
-	@Required
+	/*@Required*/
 
-	@Pattern(value = "^[0-9]{3}-[0-9]{3}-[0-9]{4}$",message = "The phone number cannot be longer than 12 digits including - or .")
-	@MaxLength(value = 12)
+	/*@Pattern(value = "^[0-9]{3}-[0-9]{3}-[0-9]{4}$",message = "The phone number cannot be longer than 12 digits including - or .")*/
+
+	@Pattern(value = "[0-9.+]+", message = "phone.pattern")
+	@MaxLength(value = 10)
 	public String mobile;
 
 
@@ -61,10 +63,13 @@ public class Volunteer extends Model {
 	public String phone;*/
 
 	//======start====the pattern of phone no added like us phone no=======12.08.2015==================//
-	@Required
+/*	@Required*/
 
-	@Pattern(value = "^[0-9]{3}-[0-9]{3}-[0-9]{4}$", message = "phone.pattern")
-	@MaxLength(value = 12)
+
+
+
+	@Pattern(value = "[0-9.+]+", message = "phone.pattern")
+	@MaxLength(value = 10)
 	public String phone;
 //======end====the pattern of phone no added like us phone no=======12.08.2015==================//
 

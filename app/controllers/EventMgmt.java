@@ -114,8 +114,118 @@ public class EventMgmt extends Controller {
 		if (event.isIdOnly()) {
 			event = Event.findById(event.id);
 		}
+
+
+
+
+
+
+
+
+		//===========================uploadimage=======================20.08.2015======================start==============================//
+		/*//  List donationList = new ArrayList();
+		List<Donation> donationList = (List<Donation>)Donation.findAllByEventId(event.id);
+		int imgUrl=0;
+		System.out.println("donationList .size :: "+donationList.size());
+		System.out.println("donationList :: "+donationList);
+		for(Donation donation:donationList){
+			if(donation.imgUrl!=null){
+				imgUrl++;
+			}
+
+		}
+
+
+*/
+
+
+		//  List donationList = new ArrayList();
+		System.out.println("within view event ::event id ----> "+event.id);
+		final Sponsors sponsors = Sponsors.findByEventId(event.id);
+		//final Sponsors sponsors1 = SponsorsfindByEventId(event.id);
+		//System.out.println("sponsors.id=> "+sponsors.id);
+		//System.out.println("sponsors.sponsoritems.size()=> "+sponsors.sponsoritems.size());
+
+
+		List<Donation> donationList = (List<Donation>)Donation.findAllByEventId(event.id);
+		Iterator<Donation> iterator=donationList.iterator();
+		List<Donation> donationList1 = new ArrayList();
+		while(iterator.hasNext()){
+			Donation donation=iterator.next();
+			//System.out.println("donation while");
+			//System.out.println("donation.sponsorItem=> "+donation.sponsorItem);
+			//System.out.println("donation.sponsorItem.title=> "+donation.sponsorItem.title);
+			SponsorItem sponsorItemFromSponsors;
+			if((sponsors.sponsoritems!=null&& sponsors.sponsoritems.size()>0) && donation.sponsorItem!=null){
+				for(int i = 0 ; i<sponsors.sponsoritems.size();i++){
+					sponsorItemFromSponsors= sponsors.sponsoritems.get(i);
+					//System.out.println("sponsorItemFromSponsors :: "+sponsorItemFromSponsors);
+					//System.out.println("donation.sponsorItem == sponsorItemFromSponsors  -->>");
+					//System.out.println(donation.sponsorItem == sponsorItemFromSponsors);
+					//System.out.println("donation.sponsorItem.id "+donation.sponsorItem.id);
+					//System.out.println("sponsorItemFromSponsors.id "+sponsorItemFromSponsors.id);
+					//System.out.println("donation.sponsorItem.id.equals(sponsorItemFromSponsors.id) "+donation.sponsorItem.id.equals(sponsorItemFromSponsors.id));
+					if( donation.sponsorItem.id.equals(sponsorItemFromSponsors.id) ){
+						System.out.println("checkbox for :: "+donation.sponsorItem.title+" sponsor item logo "+sponsorItemFromSponsors.logo);
+
+						//System.out.println("donation.sponsorItem.logo :: "+donation.sponsorItem.logo);
+
+						//donation.sponsorItem.logo!= null
+
+						if(donation.sponsorItem.logo == true){
+							//System.out.println("donationList "+donationList);
+							System.out.println("iffff  " + donation.imgUrl + "<for>" + donation.sponsorItem.title);
+							//donationList.remove(donation);
+							//System.out.println("after donationList "+donationList);
+						}else{
+							System.out.println(" elseee "+donation.imgUrl+"<for>"+donation.sponsorItem.title);
+							donationList1.add(donation);
+						}
+
+					}
+				}
+			}
+
+
+
+
+
+         /*if(donation.sponsorItem!=null) {
+            System.out.println("donation.sponsorItem.title=> "+donation.sponsorItem.title);
+            System.out.println("---------------------------" + donation.sponsorItem);
+            System.out.println("donation.sponsorItem.logo :: "+donation.sponsorItem.logo);
+            if(donation.sponsorItem.logo.equals("false")){
+               donationList.remove(donation);
+            }
+         }*/
+         /*if(donation.sponsorItem.logo.equals("false")){
+            donationList.remove(donation);
+         }*/
+		}
+		int imgUrl=0;
+   /* System.out.println("donationList .size :: "+donationList.size());
+      System.out.println("donationList :: "+donationList);*/
+		for(Donation donation:donationList1){
+			if(donation.imgUrl!=null){
+				imgUrl++;
+			}
+
+		}
+
+
+//===========================uploadimage=======================20.08.2015======================end==============================//
+
+
+
+
+
+
+
+
+
 		final User localUser = ControllerUtil.getLocalUser(session());
-		if(!Event.isLive(event) && (localUser == null || !ControllerUtil.isEqual(event.userAdmin.id, localUser.id))) {
+	if(!Event.isLive(event) && (localUser == null || !ControllerUtil.isEqual(event.userAdmin.id, localUser.id))) {
+
 			flash(ControllerUtil.FLASH_WARNING_KEY,
 					"This event is not published yet and therefore is not available at this time.");
 			return ok(views.html.index.render());
@@ -157,8 +267,9 @@ public class EventMgmt extends Controller {
 				Pfp.page(page, 0, sortBy, order, StringUtils.trimToEmpty(filter), fieldName, localUser),
 			   /*Pfp.page(0, 0, sortBy, order, StringUtils.trimToEmpty(filter), fieldName, localUser),*/
 			   sortBy,
-			   order, filter));
+			   order, filter,donationList1,imgUrl));
    }else{
+	   System.out.println("localuser == null");
 	   return ok(viewEvent.render(event,
 			   isOpen,
 			   Event.canParticipate(localUser, isOpen),
@@ -168,7 +279,7 @@ public class EventMgmt extends Controller {
 				/*Pfp.page(page, 0, sortBy, order, StringUtils.trimToEmpty(filter), fieldName, localUser),*/
 			   null,
 			   sortBy,
-			   order, filter));
+			   order, filter,donationList1,imgUrl));
    }
 
 
@@ -252,17 +363,36 @@ public class EventMgmt extends Controller {
 
 
 
-	@Restrict({ @Group(SecurityRole.ROOT_ADMIN), @Group(SecurityRole.PFP_ADMIN),
+/*	@Restrict({ @Group(SecurityRole.ROOT_ADMIN), @Group(SecurityRole.PFP_ADMIN),
 			@Group(SecurityRole.SYS_ADMIN), @Group(SecurityRole.EVENT_ADMIN) })
-	@SubjectPresent
+	@SubjectPresent*/
 	public static Result profileSearchPfpsEvents(Event event,int page, String sortBy, String order,
 												 String filter, String fieldName) {
-		System.out.println("within profileSearchPfpsEvents");
+		System.out.println("within profileSearchPfpsEvents......");
 		if (event.isIdOnly()) {
 			event = Event.findById(event.id);
 		}
+
+
+		//===========================uploadimage=======================20.08.2015======================start==============================//
+		//  List donationList = new ArrayList();
+		List<Donation> donationList = (List<Donation>) Donation.findAllByEventId(event.id);
+		int imgUrl = 0;
+		System.out.println("donationList .size :: " + donationList.size());
+		System.out.println("donationList :: " + donationList);
+		for (Donation donation : donationList) {
+			if (donation.imgUrl != null) {
+				imgUrl++;
+			}
+
+		}
+
+
+//===========================uploadimage=======================20.08.2015======================end==============================//
+
+
 		User localUser = ControllerUtil.getLocalUser(session());
-		if(!Event.isLive(event) && (localUser == null || !ControllerUtil.isEqual(event.userAdmin.id, localUser.id))) {
+		if (!Event.isLive(event) && (localUser == null || !ControllerUtil.isEqual(event.userAdmin.id, localUser.id))) {
 			flash(ControllerUtil.FLASH_WARNING_KEY,
 					"This event is not published yet and therefore is not available at this time.");
 			return ok(views.html.index.render());
@@ -285,15 +415,20 @@ public class EventMgmt extends Controller {
 
 
 		//User localUser = ControllerUtil.getLocalUser(session());
-		System.out.println("page1 "+page);
-		System.out.println("sortBy1 "+sortBy);
-		System.out.println("order1 "+order);
-		System.out.println("StringUtils.trimToEmpty(filter)1 "+StringUtils.trimToEmpty(filter));
-		System.out.println("fieldName1 "+fieldName);
-		System.out.println("localUser1 "+localUser);
-		System.out.println("page1 "+page);
+		System.out.println("page1 " + page);
+		System.out.println("sortBy1 " + sortBy);
+		System.out.println("order1 " + order);
+		System.out.println("StringUtils.trimToEmpty(filter)1 " + StringUtils.trimToEmpty(filter));
+		System.out.println("fieldName1 " + fieldName);
+		System.out.println("localUser1 " + localUser);
+		System.out.println("page1 " + page);
 
-		if(localUser.isEventAdmin() || localUser.isPfpAdmin()) {
+ //=
+		if(localUser!=null){
+
+
+
+		if (localUser.isEventAdmin() || localUser.isPfpAdmin()) {
 			System.out.println("-------------------__Root Admi------------------");
 
 
@@ -301,16 +436,16 @@ public class EventMgmt extends Controller {
 					isOpen,
 					Event.canParticipate(localUser, isOpen),
 					Event.canManage(localUser, event),
-					(Map<Long, Donation.DonationsByPfp>)donations.get("pfp"),
-					(Map<Long, Donation.DonationsByTeam>)donations.get("team"),
-					Pfp.page(page, 10, sortBy, order, StringUtils.trimToEmpty(filter), fieldName, null),
+					(Map<Long, Donation.DonationsByPfp>) donations.get("pfp"),
+					(Map<Long, Donation.DonationsByTeam>) donations.get("team"),
+					Pfp.pageForParticularEvent(page, 10, sortBy, order, StringUtils.trimToEmpty(filter), fieldName, null,event.id),
 					sortBy,
 					order,
-					filter));
+					filter, donationList, imgUrl));
 			/*return ok(viewEvent.render(
 					Pfp.page(page, 10, sortBy, order, StringUtils.trimToEmpty(filter), fieldName, localUser), sortBy,
 					order, filter));  */
-		} else if(localUser.isRootAdmin() || localUser.isSysAdmin()) {
+		} else if (localUser.isRootAdmin() || localUser.isSysAdmin()) {
 			System.out.println("-------------------__Root Adminnnnnnnnnnnnnnnnnnnnn------------------");
 
 
@@ -318,11 +453,11 @@ public class EventMgmt extends Controller {
 					isOpen,
 					Event.canParticipate(localUser, isOpen),
 					Event.canManage(localUser, event),
-					(Map<Long, Donation.DonationsByPfp>)donations.get("pfp"),
-					(Map<Long, Donation.DonationsByTeam>)donations.get("team"),
-					Pfp.page(page, 10, sortBy, order, StringUtils.trimToEmpty(filter), fieldName, null),
+					(Map<Long, Donation.DonationsByPfp>) donations.get("pfp"),
+					(Map<Long, Donation.DonationsByTeam>) donations.get("team"),
+					Pfp.pageForParticularEvent(page, 10, sortBy, order, StringUtils.trimToEmpty(filter), fieldName, null,event.id),
 					sortBy,
-					order, filter));
+					order, filter, donationList, imgUrl));
 
 
 
@@ -345,6 +480,18 @@ public class EventMgmt extends Controller {
 					Pfp.page(page, 10, sortBy, order, StringUtils.trimToEmpty(filter), fieldName, null),
 					sortBy,
 					order, filter));*/
+		}
+	}else{
+			return ok(viewEvent.render(event,
+					isOpen,
+					Event.canParticipate(localUser, isOpen),
+					Event.canManage(localUser, event),
+					(Map<Long, Donation.DonationsByPfp>) donations.get("pfp"),
+					(Map<Long, Donation.DonationsByTeam>) donations.get("team"),
+					Pfp.pageForParticularEvent(page, 10, sortBy, order, StringUtils.trimToEmpty(filter), fieldName, null, event.id),
+					sortBy,
+					order, filter, donationList, imgUrl));
+
 		}
 	}
 
@@ -923,39 +1070,6 @@ public static Result updateParticipantsForEvent(Event event, Long participantsId
 				eventForm.get().imgUrl = imgUrlFile.getUrl();
 			}
 		}
-		final Http.MultipartFormData.FilePart imgUrlFilePart1 = body
-				.getFile("imgUrl1");
-		S3File imgUrlFile1 = null;
-		if (imgUrlFilePart != null) {
-			if (!ControllerUtil.isImage(imgUrlFilePart1.getFilename())) {
-				eventForm.reject("imgUrl1", ControllerUtil.IMAGE_ERROR_MSG);
-			} else if (ControllerUtil.isFileTooLarge(imgUrlFilePart1.getFile())) {
-				eventForm.reject("imgUrl1", ControllerUtil.IMAGE_SIZE_ERROR_MSG);
-			} else {
-				imgUrlFile1 = new S3File();
-				imgUrlFile1.name = ControllerUtil.decodeFileName(imgUrlFilePart1
-						.getFilename());
-				imgUrlFile1.file = imgUrlFilePart1.getFile();
-				eventForm.get().imgUrl1 = imgUrlFile1.getUrl();
-			}
-		}
-
-		final Http.MultipartFormData.FilePart imgUrlFilePart2 = body
-				.getFile("imgUrl2");
-		S3File imgUrlFile2 = null;
-		if (imgUrlFilePart != null) {
-			if (!ControllerUtil.isImage(imgUrlFilePart2.getFilename())) {
-				eventForm.reject("imgUrl2", ControllerUtil.IMAGE_ERROR_MSG);
-			} else if (ControllerUtil.isFileTooLarge(imgUrlFilePart2.getFile())) {
-				eventForm.reject("imgUrl2", ControllerUtil.IMAGE_SIZE_ERROR_MSG);
-			} else {
-				imgUrlFile2 = new S3File();
-				imgUrlFile2.name = ControllerUtil.decodeFileName(imgUrlFilePart2
-						.getFilename());
-				imgUrlFile2.file = imgUrlFilePart2.getFile();
-				eventForm.get().imgUrl2 = imgUrlFile2.getUrl();
-			}
-		}
 		// if(eventForm.get().fundraisingEnd != null) {
 		// eventForm.get().fundraisingEnd =
 		// EventMgmt.setDateToMidnight(eventForm.get().fundraisingEnd);
@@ -992,12 +1106,6 @@ public static Result updateParticipantsForEvent(Event event, Long participantsId
 		}
 		if (imgUrlFile != null) {
 			imgUrlFile.save();
-		}
-		if (imgUrlFile1 != null) {
-			imgUrlFile1.save();
-		}
-		if (imgUrlFile2 != null) {
-			imgUrlFile2.save();
 		}
 		event.dateCreated = new Date();
 		event.save();
@@ -1081,40 +1189,6 @@ public static Result updateParticipantsForEvent(Event event, Long participantsId
 				eventForm.reject("imgUrl", ControllerUtil.IMAGE_ERROR_MSG);
 			}
 		}
-
-		final Http.MultipartFormData.FilePart imgUrlFilePart1 = body
-				.getFile("imgUrl1");
-		S3File imgUrlFile1 = null;
-		if (imgUrlFilePart1 != null) {
-			if (ControllerUtil.isImage(imgUrlFilePart1.getFilename())) {
-				imgUrlFile1 = new S3File();
-				imgUrlFile1.name = ControllerUtil.decodeFileName(imgUrlFilePart1
-						.getFilename());
-				imgUrlFile1.file = imgUrlFilePart1.getFile();
-				Logger.debug("IMAGE FILE SIZE - "
-						+ imgUrlFilePart1.getFile().length());
-				eventForm.get().imgUrl1 = imgUrlFile1.getUrl();
-			} else {
-				eventForm.reject("imgUrl1", ControllerUtil.IMAGE_ERROR_MSG);
-			}
-		}
-
-		final Http.MultipartFormData.FilePart imgUrlFilePart2 = body
-				.getFile("imgUrl2");
-		S3File imgUrlFile2 = null;
-		if (imgUrlFilePart2 != null) {
-			if (ControllerUtil.isImage(imgUrlFilePart2.getFilename())) {
-				imgUrlFile2 = new S3File();
-				imgUrlFile2.name = ControllerUtil.decodeFileName(imgUrlFilePart2
-						.getFilename());
-				imgUrlFile2.file = imgUrlFilePart2.getFile();
-				Logger.debug("IMAGE FILE SIZE - "
-						+ imgUrlFilePart2.getFile().length());
-				eventForm.get().imgUrl2 = imgUrlFile2.getUrl();
-			} else {
-				eventForm.reject("imgUrl2", ControllerUtil.IMAGE_ERROR_MSG);
-			}
-		}
 		// if(eventForm.get().fundraisingEnd != null) {
 		// eventForm.get().fundraisingEnd =
 		// EventMgmt.setDateToMidnight(eventForm.get().fundraisingEnd);
@@ -1136,18 +1210,6 @@ public static Result updateParticipantsForEvent(Event event, Long participantsId
 				S3File.delete(event.imgUrl);
 			}
 			imgUrlFile.save();
-		}
-		if (imgUrlFile1 != null) {
-			if(event.imgUrl1 != null) {
-				S3File.delete(event.imgUrl);
-			}
-			imgUrlFile1.save();
-		}
-		if (imgUrlFile2 != null) {
-			if(event.imgUrl2 != null) {
-				S3File.delete(event.imgUrl);
-			}
-			imgUrlFile2.save();
 		}
 		updatedEvent.update(event.id);
 		flash(ControllerUtil.FLASH_SUCCESS_KEY, "Event ["

@@ -182,6 +182,10 @@ public class TaxidSignup extends Signup {
 		final Form<TaxidUserSignup> filledForm = TaxidAuthProvider.SIGNUP_FORM
 				.bindFromRequest();
 		if (StringUtils.isNotEmpty(filledForm.data().get("mail")) || StringUtils.isNotEmpty(filledForm.data().get("mobile"))) {
+
+			/*TaxidUserSignup taxidUserSignup	 = (TaxidUserSignup)filledForm.get();
+			taxidUserSignup.agreeToPolicy = false;*/
+
 			filledForm.reject("Form submission has errors, please contact us if you are receiving this error.");
 		}
 		if (filledForm.hasErrors()) {
@@ -189,6 +193,9 @@ public class TaxidSignup extends Signup {
 					.toString());
 			Logger.debug("IN the doSignup - has errors");
 			// User did not fill everything properly
+
+			/*TaxidUserSignup taxidUserSignup	 = (TaxidUserSignup)filledForm.get();
+			taxidUserSignup.agreeToPolicy = false;*/
 			return badRequest(signup_taxid.render(filledForm));
 		} else {
 			Logger.debug("IN the doSignup - no has errors");

@@ -147,9 +147,9 @@ public class Donation extends Model implements PathBindable<Donation> {
 	public String			phone;
 	//===============for image and web=================start==================================//
 
-	/*public URL             imgUrl;
+	/*public URL             imgUrl;*/
 
-	public String           webUrl;*/
+	/*public String           webUrl;*/
 	//===============for image and web=================end==================================//
 	
 	public PaymentStatus	status;
@@ -162,6 +162,12 @@ public class Donation extends Model implements PathBindable<Donation> {
 	
 	@Pattern(value = "(\\d{5}([\\-]\\d{4})?)", message = "zip.pattern")
 	public String			zipCode;
+
+	/*****************For Img URL*****************/
+
+	public URL imgUrl;
+
+	public String           webUrl;
 	
 	@OneToOne(mappedBy = "donation", optional = true)
 	@JsonManagedReference
@@ -184,6 +190,9 @@ public class Donation extends Model implements PathBindable<Donation> {
 		//return find.where().eq("id", id).select("id, heroImgUrl, eventEnd, eventStart, slug, status, schoolId, fundraisingEnd, fundraisingStart, goal, name, userAdmin, generalFund").fetch("userAdmin").fetch("generalFund").findUnique();
 	}
 	//========end======rimi donation of event logic=========30.07.2015================================//
+
+
+
 
 
 
